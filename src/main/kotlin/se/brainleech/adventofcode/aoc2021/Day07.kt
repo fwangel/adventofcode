@@ -1,5 +1,6 @@
 package se.brainleech.adventofcode.aoc2021
 
+import java.util.stream.IntStream
 import kotlin.math.abs
 
 class Day07 {
@@ -8,20 +9,13 @@ class Day07 {
         val sorted = input.sorted()
         val minPosition = sorted.first()
         val maxPosition = sorted.last()
-        println("$minPosition .. $maxPosition")
 
-        var bestPosition = Int.MAX_VALUE
-        var bestFuelUsage = Int.MAX_VALUE
-        for (position in minPosition..maxPosition) {
-            val fuelUsage = sorted.sumOf { abs(position - it) }
-            if (fuelUsage < bestFuelUsage) {
-                bestFuelUsage = fuelUsage
-                bestPosition = position
+        return IntStream.rangeClosed(minPosition, maxPosition)
+            .map { position ->
+                sorted.sumOf { abs(position - it) }
             }
-        }
-
-        println("bestFuelUsage=$bestFuelUsage, bestPosition=$bestPosition")
-        return bestFuelUsage
+            .min()
+            .orElse(-1)
     }
 
     fun part2(input: List<Int>): Int {
