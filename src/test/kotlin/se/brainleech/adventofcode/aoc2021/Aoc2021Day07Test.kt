@@ -6,11 +6,11 @@ import se.brainleech.adventofcode.out
 import se.brainleech.adventofcode.readText
 import se.brainleech.adventofcode.toListOfInts
 
-internal class Day07Test {
-    private val solver = Day07()
-    private val prefix = "aoc2021/day07"
-    private val testData = readText("$prefix.testinput.txt").toListOfInts()
-    private val realData = readText("$prefix.input.txt").toListOfInts()
+internal class Aoc2021Day07Test {
+    private val solver = Aoc2021Day07()
+    private val prefix = "aoc2021/aoc2021day07"
+    private val testData = readText("$prefix.test.txt").toListOfInts()
+    private val realData = readText("$prefix.real.txt").toListOfInts()
 
     @Test
     fun part1() {

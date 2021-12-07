@@ -1,6 +1,6 @@
 package se.brainleech.adventofcode.aoc2015
 
-class Day01 {
+class Aoc2015Day01 {
 
     fun part1(input: String): Int {
         var floor = 0

@@ -2,7 +2,7 @@ package se.brainleech.adventofcode.aoc2021
 
 import java.util.stream.Stream
 
-class Day02 {
+class Aoc2021Day02 {
 
     data class Command(val direction: String, val amount: Int)
 

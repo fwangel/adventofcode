@@ -3,7 +3,7 @@ package se.brainleech.adventofcode.aoc2020
 import java.util.stream.IntStream
 import kotlin.streams.toList
 
-class Day01 {
+class Aoc2020Day01 {
 
     fun part1(input: IntStream): Int {
         val entries = input.toList()

@@ -4,7 +4,7 @@ import java.util.stream.Collectors
 import java.util.stream.Stream
 import kotlin.streams.toList
 
-class Day03 {
+class Aoc2021Day03 {
     private fun transpose(matrix: List<IntArray>): Array<IntArray> {
         val rows = matrix.size
         val columns = matrix[0].size

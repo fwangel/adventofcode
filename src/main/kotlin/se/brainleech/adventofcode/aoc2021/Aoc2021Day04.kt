@@ -4,7 +4,7 @@ import java.util.regex.Pattern
 import java.util.stream.Stream
 import kotlin.streams.toList
 
-class Day04 {
+class Aoc2021Day04 {
 
     data class Marker(val number: Int, var played: Boolean = false)
 

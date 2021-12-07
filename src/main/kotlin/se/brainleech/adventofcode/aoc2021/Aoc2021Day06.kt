@@ -2,7 +2,7 @@ package se.brainleech.adventofcode.aoc2021
 
 import se.brainleech.adventofcode.toListOfInts
 
-class Day06 {
+class Aoc2021Day06 {
     companion object {
         private const val SPAWN_AGE = 8
         private const val SPAWN_RATE = 6

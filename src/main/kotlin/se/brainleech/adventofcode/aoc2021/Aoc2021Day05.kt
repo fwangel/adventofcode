@@ -2,7 +2,7 @@ package se.brainleech.adventofcode.aoc2021
 
 import java.util.stream.Stream
 
-class Day05 {
+class Aoc2021Day05 {
 
     data class Point(val x: Int, val y: Int) : Comparable<Point> {
         override operator fun compareTo(other: Point): Int {

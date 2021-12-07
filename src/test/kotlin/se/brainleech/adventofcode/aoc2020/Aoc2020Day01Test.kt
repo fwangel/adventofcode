@@ -5,11 +5,11 @@ import org.junit.jupiter.api.Test
 import se.brainleech.adventofcode.out
 import se.brainleech.adventofcode.readIntegers
 
-internal class Day01Test {
-    private val solver = Day01()
-    private val prefix = "aoc2020/day01"
-    private val testData = readIntegers("$prefix.testinput.txt")
-    private val realData = readIntegers("$prefix.input.txt")
+internal class Aoc2020Day01Test {
+    private val solver = Aoc2020Day01()
+    private val prefix = "aoc2020/aoc2020day01"
+    private val testData = readIntegers("$prefix.test.txt")
+    private val realData = readIntegers("$prefix.real.txt")
 
     @Test
     fun part1() {

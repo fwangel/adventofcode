@@ -1,6 +1,6 @@
 package se.brainleech.adventofcode.aoc2015
 
-class Day02 {
+class Aoc2015Day02 {
 
     data class Box(val l: Long, val w: Long, val h: Long) {
         private fun surfaceArea(): Long = 0
