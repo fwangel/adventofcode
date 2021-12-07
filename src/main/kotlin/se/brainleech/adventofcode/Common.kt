@@ -39,5 +39,6 @@ fun readText(filename: String): String {
 }
 
 fun String.toListOfInts(): List<Int> {
+    if (this.isBlank()) return emptyList()
     return this.split(",").map { it.toInt() }
 }
