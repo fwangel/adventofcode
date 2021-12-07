@@ -20,7 +20,7 @@ internal class Day07Test {
 
     @Test
     fun part2() {
-        assertEquals(-1, solver.part2(testData))
+        assertEquals(168, solver.part2(testData))
         out(solver.part2(realData), "$prefix.part2 = ")
     }
 

@@ -19,7 +19,18 @@ class Day07 {
     }
 
     fun part2(input: List<Int>): Int {
-        return -1
+        val sorted = input.sorted()
+        val minPosition = sorted.first()
+        val maxPosition = sorted.last()
+
+        return IntStream.rangeClosed(minPosition, maxPosition)
+            .map { position ->
+                sorted.sumOf {
+                    IntStream.rangeClosed(1, abs(position - it)).sum()
+                }
+            }
+            .min()
+            .orElse(-1)
     }
 
 }
