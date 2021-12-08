@@ -42,3 +42,10 @@ fun String.toListOfInts(): List<Int> {
     if (this.isBlank()) return emptyList()
     return this.split(",").map { it.toInt() }
 }
+
+fun String.sortedByChar(): String {
+    return this
+        .toCharArray()
+        .sorted()
+        .joinToString("")
+}
