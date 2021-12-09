@@ -62,6 +62,7 @@ class Aoc2021Day09 {
             lowPoints().forEach { position ->
                 basinSizes.add(fillBasin(position.row, position.col).toLong())
 
+                // keep only the largest N basins
                 basinSizes.sortDescending()
                 if (basinSizes.size > max) basinSizes.removeAt(max)
             }

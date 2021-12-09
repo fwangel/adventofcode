@@ -11,9 +11,7 @@ class Aoc2021Day07 {
         val maxPosition = sorted.last()
 
         return IntStream.rangeClosed(minPosition, maxPosition)
-            .map { position ->
-                sorted.sumOf { abs(position - it) }
-            }
+            .map { position -> sorted.sumOf { abs(position - it) } }
             .min()
             .orElse(-1)
     }
@@ -24,11 +22,7 @@ class Aoc2021Day07 {
         val maxPosition = sorted.last()
 
         return IntStream.rangeClosed(minPosition, maxPosition)
-            .map { position ->
-                sorted.sumOf {
-                    IntStream.rangeClosed(1, abs(position - it)).sum()
-                }
-            }
+            .map { position -> sorted.sumOf { IntStream.rangeClosed(1, abs(position - it)).sum() } }
             .min()
             .orElse(-1)
     }

@@ -8,11 +8,11 @@ class Aoc2021Day04 {
 
     data class Marker(val number: Int, var played: Boolean = false)
 
-    data class Board(
-        val columns: Int,
-        val rows: Int,
-        var markers: Array<Marker>,
-        var won: Boolean = false,
+    class Board(
+        private val columns: Int,
+        private val rows: Int,
+        private var markers: Array<Marker>,
+        private var won: Boolean = false,
         var winningNumber: Int = 0,
         var score: Int = 0
     ) {
@@ -63,9 +63,9 @@ class Aoc2021Day04 {
         }
     }
 
-    data class Game(
+    class Game(
         var numbers: IntArray = intArrayOf(),
-        var boards: MutableList<Board> = mutableListOf(),
+        private var boards: MutableList<Board> = mutableListOf(),
         var lastCompleted: Board? = null
     ) {
         fun addBoard(board: Board) {

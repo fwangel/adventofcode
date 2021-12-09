@@ -51,9 +51,9 @@ class Aoc2021Day03 {
 
     fun part1(source: Stream<String>): Int {
         val input = source
-            .map { it ->
-                it.toCharArray()
-                    .map { it.digitToInt() }
+            .map { bits ->
+                bits.toCharArray()
+                    .map { bit -> bit.digitToInt() }
                     .toIntArray()
             }
             .collect(Collectors.toList())
@@ -69,9 +69,9 @@ class Aoc2021Day03 {
 
     fun part2(source: Stream<String>): Int {
         val input = source
-            .map { it ->
-                it.toCharArray()
-                    .map { it.digitToInt() }
+            .map { bits ->
+                bits.toCharArray()
+                    .map { bit -> bit.digitToInt() }
                     .toIntArray()
             }
             .toList()

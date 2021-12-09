@@ -4,9 +4,11 @@ import java.util.stream.Stream
 
 class Aoc2021Day02 {
 
-    data class Command(val direction: String, val amount: Int)
+    data class Command(val direction: String, val amount: Long)
 
-    class Position(var horizontal: Int = 0, var depth: Int = 0, private var aim: Int = 0) {
+    class Position(var horizontal: Long = 0, var depth: Long = 0) {
+        private var aim: Long = 0
+
         fun apply(command: Command) {
             when (command.direction) {
                 "up" -> this.depth -= command.amount
@@ -29,16 +31,16 @@ class Aoc2021Day02 {
 
     private fun String.asCommand(): Command {
         val (direction, amount) = this.split(" ")
-        return Command(direction, amount.toInt())
+        return Command(direction, amount.toLong())
     }
 
-    fun part1(input: Stream<String>): Int {
+    fun part1(input: Stream<String>): Long {
         val p = Position()
         input.forEach { p.apply(it.asCommand()) }
         return p.horizontal * p.depth
     }
 
-    fun part2(input: Stream<String>): Int {
+    fun part2(input: Stream<String>): Long {
         val p = Position()
         input.forEach { p.applyWithAim(it.asCommand()) }
         return p.horizontal * p.depth
