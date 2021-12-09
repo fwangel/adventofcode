@@ -36,15 +36,18 @@ class Aoc2021Day09 {
         }
     }
 
-    fun part1(input: Stream<String>): Long {
-        val heights = input.toList()
-        if (heights.isEmpty()) return -1L
+    private fun Stream<String>.asHeightmap(): Heightmap {
+        val heights = this.toList()
         val rows = heights.count()
         val columns = heights.first().length
-        val map = Heightmap(rows, columns, heights)
-        val lowPoints = map.lowPoints()
+        return Heightmap(rows, columns, heights)
+    }
 
-        return lowPoints.sumOf { it.height + 1 }
+    fun part1(input: Stream<String>): Long {
+        return input
+            .asHeightmap()
+            .lowPoints()
+            .sumOf { it.height + 1 }
     }
 
     fun part2(input: Stream<String>): Long {
