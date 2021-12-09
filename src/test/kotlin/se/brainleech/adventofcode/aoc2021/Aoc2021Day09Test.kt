@@ -19,7 +19,7 @@ class Aoc2021Day09Test {
 
     @Test
     fun testPart2() {
-        assertEquals(-1L, solver.part2(testData))
+        assertEquals(1134L, solver.part2(testData))
         out(solver.part2(realData), "$prefix.part2 = ")
     }
 
