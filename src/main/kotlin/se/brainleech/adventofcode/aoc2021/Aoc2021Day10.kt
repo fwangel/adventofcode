@@ -29,24 +29,24 @@ class Aoc2021Day10 {
         )
     }
 
-    class SyntaxChecker(val input: CharArray) {
-        fun syntaxErrorScore(): Int {
+    class SyntaxChecker(private val line: String) {
+        fun syntaxErrorScore(): Long {
             val expectedChars = LinkedList<Char>()
-            for (char in input) {
+            for (char in line) {
                 if (BUDDIES.containsValue(char)) {
                     if (char != expectedChars.pop()) {
-                        return ERROR_SCORES[char]!!
+                        return ERROR_SCORES[char]!!.toLong()
                     }
                 } else {
                     expectedChars.push(BUDDIES[char])
                 }
             }
-            return 0
+            return 0L
         }
 
         fun missingCharsScore(): Long {
             val expectedChars = LinkedList<Char>()
-            for (char in input) {
+            for (char in line) {
                 if (BUDDIES.containsValue(char)) {
                     expectedChars.pop()
                 } else {
@@ -62,23 +62,19 @@ class Aoc2021Day10 {
     fun part1(input: Stream<String>): Long {
         return input
             .asSequence()
-            .sumOf {
-                SyntaxChecker(it.toCharArray())
-                    .syntaxErrorScore()
-                    .toLong()
-            }
+            .sumOf { line -> SyntaxChecker(line).syntaxErrorScore() }
     }
 
     fun part2(input: Stream<String>): Long {
         val missingScores = input
             .asSequence()
-            .map { SyntaxChecker(it.toCharArray()) }
-            .filter { it.syntaxErrorScore() == 0 }
-            .map { it.missingCharsScore() }
+            .map { line -> SyntaxChecker(line) }
+            .filter { checker -> checker.syntaxErrorScore() == 0L }
+            .map { checker -> checker.missingCharsScore() }
             .sorted()
             .toList()
 
-        return missingScores.drop(missingScores.size / 2).first().toLong()
+        return missingScores.drop(missingScores.size / 2).first()
     }
 
 }
