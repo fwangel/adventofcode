@@ -20,6 +20,13 @@ class Aoc2021Day10 {
             '}' to 1197,
             '>' to 25137
         )
+
+        private val MISSING_SCORES = mapOf(
+            ')' to 1,
+            ']' to 2,
+            '}' to 3,
+            '>' to 4
+        )
     }
 
     class SyntaxChecker(val input: CharArray) {
@@ -36,6 +43,20 @@ class Aoc2021Day10 {
             }
             return 0
         }
+
+        fun missingCharsScore(): Long {
+            val expectedChars = LinkedList<Char>()
+            for (char in input) {
+                if (BUDDIES.containsValue(char)) {
+                    expectedChars.pop()
+                } else {
+                    expectedChars.push(BUDDIES[char])
+                }
+            }
+            return expectedChars
+                .map { char -> MISSING_SCORES[char]!!.toLong() }
+                .reduce { total, score -> total.times(5).plus(score) }
+        }
     }
 
     fun part1(input: Stream<String>): Long {
@@ -49,7 +70,15 @@ class Aoc2021Day10 {
     }
 
     fun part2(input: Stream<String>): Long {
-        return -1
+        val missingScores = input
+            .asSequence()
+            .map { SyntaxChecker(it.toCharArray()) }
+            .filter { it.syntaxErrorScore() == 0 }
+            .map { it.missingCharsScore() }
+            .sorted()
+            .toList()
+
+        return missingScores.drop(missingScores.size / 2).first().toLong()
     }
 
 }
