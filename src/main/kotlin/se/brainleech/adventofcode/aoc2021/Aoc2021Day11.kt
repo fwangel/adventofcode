@@ -97,7 +97,7 @@ class Aoc2021Day11 {
                 drainEnergyOfJustFlashed()
             }
 
-            println("After step %d:\n%s\n\n".format(steps, this))
+            // println("After step %d:\n%s\n\n".format(steps, this))
             return totalFlashes
         }
 
@@ -107,7 +107,7 @@ class Aoc2021Day11 {
                 affectNearbyOctopi(justFlashed)
                 drainEnergyOfJustFlashed()
                 if (totalEnergy() == 0) {
-                    println("After step %d:\n%s\n\n".format(step, this))
+                    // println("After step %d:\n%s\n\n".format(step, this))
                     return step
                 }
                 // println("After step %d:\n%s\n\n".format(step, this))
