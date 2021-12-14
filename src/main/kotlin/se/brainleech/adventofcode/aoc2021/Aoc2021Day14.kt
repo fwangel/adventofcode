@@ -38,7 +38,7 @@ class Aoc2021Day14 {
             for (step in 1..steps) {
                 chain.windowed(2).withIndex()
                     .map { indexedPair ->
-                        chain.insert(1 + (indexedPair.index * 2), insertionRules[indexedPair.value])
+                        chain.insert(1.plus(indexedPair.index.times(2)), insertionRules[indexedPair.value])
                     }
             }
             return this
@@ -55,8 +55,9 @@ class Aoc2021Day14 {
         }
 
         override fun maxMinusMinQuantity(): Long {
-            val quantities = quantitiesByElement().map { it.value }.sorted()
-            return quantities.last().minus(quantities.first())
+            return quantitiesByElement().map { it.value }.sorted().let { quantities ->
+                quantities.last().minus(quantities.first())
+            }
         }
     }
 
@@ -78,7 +79,7 @@ class Aoc2021Day14 {
                 .eachCount()
                 .mapValues { entry -> entry.value.toLong() }
 
-            for (step in 1..steps) {
+            repeat(steps) {
                 val updatedQuantities = mutableMapOf<String, Long>()
                 quantitiesPerPair.forEach { (pair, pairQuantity) ->
                     val newElement = insertionRules[pair]
@@ -111,8 +112,9 @@ class Aoc2021Day14 {
             }
 
             // adjust the totals by half and determine the MAX and MIN difference
-            val quantities = quantitiesPerElement.map { it.value.half() }.sorted()
-            return quantities.last().minus(quantities.first())
+            return quantitiesPerElement.map { it.value.half() }.sorted().let { quantities ->
+                quantities.last().minus(quantities.first())
+            }
         }
 
     }
