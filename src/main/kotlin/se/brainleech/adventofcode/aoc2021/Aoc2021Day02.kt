@@ -4,6 +4,10 @@ import java.util.stream.Stream
 
 class Aoc2021Day02 {
 
+    companion object {
+        private const val COMMAND_DATA_SEPARATOR = " "
+    }
+
     data class Command(val direction: String, val amount: Long)
 
     class Position(var horizontal: Long = 0, var depth: Long = 0) {
@@ -30,7 +34,7 @@ class Aoc2021Day02 {
     }
 
     private fun String.asCommand(): Command {
-        val (direction, amount) = this.split(" ")
+        val (direction, amount) = this.split(COMMAND_DATA_SEPARATOR)
         return Command(direction, amount.toLong())
     }
 

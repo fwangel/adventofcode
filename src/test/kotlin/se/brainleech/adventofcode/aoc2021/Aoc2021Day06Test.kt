@@ -14,14 +14,14 @@ class Aoc2021Day06Test {
     @Test
     fun testPart1() {
         assertEquals(26L, solver.part1(testData, 18))
-        assertEquals(5934L, solver.part1(testData, 80))
-        assertEquals(379114L, solver.part1(realData, 80))
+        assertEquals(59_34L, solver.part1(testData, 80))
+        assertEquals(379_114L, solver.part1(realData, 80))
         out(solver.part1(realData, 80), "$prefix.part1 = ")
     }
 
     @Test
     fun testPart2() {
-        assertEquals(26984457539L, solver.part2(testData, 256))
+        assertEquals(26_984_457_539L, solver.part2(testData, 256))
         out(solver.part2(realData, 256), "$prefix.part2 = ")
     }
 

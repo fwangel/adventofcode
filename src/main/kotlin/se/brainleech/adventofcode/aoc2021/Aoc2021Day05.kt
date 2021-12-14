@@ -4,6 +4,11 @@ import java.util.stream.Stream
 
 class Aoc2021Day05 {
 
+    companion object {
+        private const val POINT_SEPARATOR = " -> "
+        private const val NUMBER_SEPARATOR = ","
+    }
+
     data class Point(val x: Int, val y: Int) : Comparable<Point> {
         override operator fun compareTo(other: Point): Int {
             return when {
@@ -27,9 +32,7 @@ class Aoc2021Day05 {
         }
 
         fun addPoints(newPoints: List<Point>) {
-            newPoints.forEach {
-                addPoint(it)
-            }
+            newPoints.forEach { point -> addPoint(point) }
         }
 
         fun countDangerousPoints(): Int {
@@ -73,7 +76,10 @@ class Aoc2021Day05 {
     }
 
     private fun String.asLine(): Line {
-        val (x1, y1, x2, y2) = this.replace(" -> ", ",").split(Regex(",")).map { it.toInt() }
+        val (x1, y1, x2, y2) = this
+            .replace(POINT_SEPARATOR, NUMBER_SEPARATOR)
+            .split(Regex(NUMBER_SEPARATOR))
+            .map { it.toInt() }
         val points = listOf(Point(x1, y1), Point(x2, y2)).sorted()
         return Line(points.first(), points.last())
     }

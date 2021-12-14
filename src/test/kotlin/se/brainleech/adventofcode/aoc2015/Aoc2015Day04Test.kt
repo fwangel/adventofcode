@@ -13,14 +13,14 @@ internal class Aoc2015Day04Test {
 
     @Test
     fun part1() {
-        assertEquals(1048970, solver.part1(testData, 1048000))
-        out(solver.part1(realData, 254000), "$prefix.part1 = ")
+        assertEquals(1_048_970, solver.part1(testData, 1_048_000))
+        out(solver.part1(realData, 254_000), "$prefix.part1 = ")
     }
 
     @Test
     fun part2() {
-        assertEquals(5714438, solver.part2(testData, 5714000))
-        out(solver.part2(realData, 1038000), "$prefix.part2 = ")
+        assertEquals(5_714_438, solver.part2(testData, 5_714_000))
+        out(solver.part2(realData, 1_038_000), "$prefix.part2 = ")
     }
 
 }

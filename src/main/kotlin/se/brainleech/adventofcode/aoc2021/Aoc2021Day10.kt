@@ -17,8 +17,8 @@ class Aoc2021Day10 {
         private val ERROR_SCORES = mapOf(
             ')' to 3,
             ']' to 57,
-            '}' to 1197,
-            '>' to 25137
+            '}' to 1_197,
+            '>' to 25_137
         )
 
         private val MISSING_SCORES = mapOf(

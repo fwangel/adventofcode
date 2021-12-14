@@ -1,10 +1,14 @@
 package se.brainleech.adventofcode.aoc2021
 
-import java.util.regex.Pattern
 import java.util.stream.Stream
 import kotlin.streams.toList
 
 class Aoc2021Day04 {
+
+    companion object {
+        private const val NUMBER_SEPARATOR = ","
+        private val ONE_OR_MORE_SPACE = Regex(pattern = "\\s+")
+    }
 
     data class Marker(val number: Int, var played: Boolean = false)
 
@@ -73,18 +77,18 @@ class Aoc2021Day04 {
         }
 
         fun play(number: Int) {
-            boards.forEach {
-                it.play(number)
+            boards.forEach { board ->
+                board.play(number)
 
-                if (it.completed() && it.winningNumber == number) {
-                    lastCompleted = it
+                if (board.completed() && board.winningNumber == number) {
+                    lastCompleted = board
                 }
             }
         }
     }
 
     private fun String.toIntArray(): IntArray {
-        return this.split(",").map { it.toInt() }.toIntArray()
+        return this.split(NUMBER_SEPARATOR).map { it.toInt() }.toIntArray()
     }
 
     private fun parse(lines: List<String>): Game {
@@ -116,9 +120,7 @@ class Aoc2021Day04 {
 
                 }
                 else -> {
-                    val row =
-                        line.trim().split(Pattern.compile("\\s+")).map { it.trim().toInt() }
-                            .toList()
+                    val row = line.trim().split(ONE_OR_MORE_SPACE).map { it.trim().toInt() }.toList()
                     if (boardColumns == 0) {
                         boardColumns = row.size
                     }
@@ -145,8 +147,8 @@ class Aoc2021Day04 {
     fun part1(input: Stream<String>): Int {
         val game = parse(input.toList())
 
-        game.numbers.forEach {
-            game.play(it)
+        game.numbers.forEach { number ->
+            game.play(number)
 
             val lastCompleted = game.lastCompleted
             if (lastCompleted != null) {
@@ -160,8 +162,8 @@ class Aoc2021Day04 {
     fun part2(input: Stream<String>): Int {
         val game = parse(input.toList())
 
-        game.numbers.forEach {
-            game.play(it)
+        game.numbers.forEach { number ->
+            game.play(number)
         }
 
         val lastCompleted = game.lastCompleted

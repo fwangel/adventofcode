@@ -91,7 +91,7 @@ class Aoc2021Day11 {
         }
 
         fun simulate(steps: Int): Long {
-            for (step in 1..steps) {
+            repeat(steps) {
                 val justFlashed = boostAll(this.octopi.flatten())
                 affectNearbyOctopi(justFlashed)
                 drainEnergyOfJustFlashed()
@@ -102,15 +102,13 @@ class Aoc2021Day11 {
         }
 
         fun simulateUntilAllFlashes(): Int {
-            for (step in 1..Int.MAX_VALUE) {
+            repeat(Int.MAX_VALUE) { step ->
                 val justFlashed = boostAll(this.octopi.flatten())
                 affectNearbyOctopi(justFlashed)
                 drainEnergyOfJustFlashed()
                 if (totalEnergy() == 0) {
-                    // println("After step %d:\n%s\n\n".format(step, this))
-                    return step
+                    return step + 1
                 }
-                // println("After step %d:\n%s\n\n".format(step, this))
             }
             return 0
         }

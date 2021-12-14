@@ -7,12 +7,12 @@ class Aoc2021Day01 {
 
     fun part1(input: IntStream) = input
         .asSequence()
-        .windowed(2)
+        .windowed(size = 2)
         .count { (current, next) -> current < next }
 
     fun part2(input: IntStream) = input
         .asSequence()
-        .windowed(4)
+        .windowed(size = 4)
         .count { (first, _, _, last) -> first < last }
 
 }

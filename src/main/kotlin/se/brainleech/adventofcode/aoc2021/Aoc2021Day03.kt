@@ -5,6 +5,12 @@ import java.util.stream.Stream
 import kotlin.streams.toList
 
 class Aoc2021Day03 {
+
+    companion object {
+        private const val ZERO = 0
+        private const val ONE = 1
+    }
+
     private fun transpose(matrix: List<IntArray>): Array<IntArray> {
         val rows = matrix.size
         val columns = matrix[0].size
@@ -23,18 +29,18 @@ class Aoc2021Day03 {
 
     private fun IntArray.mostOf(): Int {
         val groups = this.groupBy { it }.withDefault { emptyList() }
-        if (groups.getValue(1).size >= groups.getValue(0).size) {
-            return 1
+        if (groups.getValue(ONE).size >= groups.getValue(ZERO).size) {
+            return ONE
         }
-        return 0
+        return ZERO
     }
 
     private fun IntArray.leastOf(): Int {
         val groups = this.groupBy { it }.withDefault { emptyList() }
-        if (groups.getValue(1).size < groups.getValue(0).size) {
-            return 1
+        if (groups.getValue(ONE).size < groups.getValue(ZERO).size) {
+            return ONE
         }
-        return 0
+        return ZERO
     }
 
     private fun Array<IntArray>.mostOfByIndex(): Map<Int, Int> {
