@@ -35,7 +35,7 @@ class Aoc2021Day14 {
 
         override fun process(steps: Int): PolymerExpander {
             // insert the mapped element for every pair on each iteration
-            for (step in 1..steps) {
+            repeat(steps) {
                 chain.windowed(2).withIndex()
                     .map { indexedPair ->
                         chain.insert(1.plus(indexedPair.index.times(2)), insertionRules[indexedPair.value])
