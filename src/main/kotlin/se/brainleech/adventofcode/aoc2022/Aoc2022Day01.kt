@@ -6,23 +6,23 @@ import kotlin.math.max
 class Aoc2022Day01 {
 
     fun part1(input: Stream<String>): Long {
-        var maxCalories = Long.MIN_VALUE
+        var maxCalories = 0L
         var currentCalories = 0L
         input.forEach {
             if (it.isBlank()) currentCalories = 0L
-            else currentCalories += it.toLong()
-            maxCalories = max(maxCalories, currentCalories)
+            else {
+                currentCalories += it.toLong()
+                maxCalories = max(maxCalories, currentCalories)
+            }
         }
         return maxCalories
     }
 
     fun part2(input: Stream<String>): Long {
         val maxCalories = MutableList(4) { 0L }
-        var currentCalories = 0L
         input.forEach {
-            if (it.isBlank()) maxCalories.sortDescending().also { currentCalories = 0L }
-            else currentCalories += it.toLong()
-            maxCalories[3] = currentCalories
+            if (it.isBlank()) maxCalories.sortDescending().also { maxCalories[3] = 0L }
+            else maxCalories[3] += it.toLong()
         }
         return maxCalories.sortedDescending().take(3).sum()
     }
