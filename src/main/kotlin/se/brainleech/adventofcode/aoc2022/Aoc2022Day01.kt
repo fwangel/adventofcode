@@ -9,13 +9,10 @@ class Aoc2022Day01 {
         var maxCalories = 0L
         var currentCalories = 0L
         input.forEach {
-            if (it.isBlank()) currentCalories = 0L
-            else {
-                currentCalories += it.toLong()
-                maxCalories = max(maxCalories, currentCalories)
-            }
+            if (it.isBlank()) maxCalories = max(maxCalories, currentCalories).also { currentCalories = 0L }
+            else currentCalories += it.toLong()
         }
-        return maxCalories
+        return max(maxCalories, currentCalories)
     }
 
     fun part2(input: Stream<String>): Long {
