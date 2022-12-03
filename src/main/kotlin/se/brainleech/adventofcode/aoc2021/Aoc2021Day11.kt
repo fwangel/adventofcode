@@ -1,7 +1,8 @@
 package se.brainleech.adventofcode.aoc2021
 
-import java.util.stream.Stream
-import kotlin.streams.toList
+import se.brainleech.adventofcode.compute
+import se.brainleech.adventofcode.readLines
+import se.brainleech.adventofcode.verify
 
 class Aoc2021Day11 {
 
@@ -120,24 +121,37 @@ class Aoc2021Day11 {
         }
     }
 
-    private fun Stream<String>.asShoal(): Shoal {
+    private fun List<String>.asShoal(): Shoal {
         val octopi = this.map { line -> line.toCharArray().map { char -> Octopus(char.digitToInt()) } }.toList()
         val rows = octopi.count()
         val columns = octopi.first().size
         return Shoal(rows, columns, octopi)
     }
 
-    fun part1(input: Stream<String>): Long {
+    fun part1(input: List<String>): Long {
         return input
             .asShoal()
             .simulate(100)
     }
 
-    fun part2(input: Stream<String>): Long {
+    fun part2(input: List<String>): Long {
         return input
             .asShoal()
             .simulateUntilAllFlashes()
             .toLong()
     }
 
+}
+
+fun main() {
+    val solver = Aoc2021Day11()
+    val prefix = "aoc2021/aoc2021day11"
+    val testData = readLines("$prefix.test.txt")
+    val realData = readLines("$prefix.real.txt")
+
+    verify(1_656L, solver.part1(testData))
+    compute({ solver.part1(realData) }, "$prefix.part1 = ")
+
+    verify(195L, solver.part2(testData))
+    compute({ solver.part2(realData) }, "$prefix.part2 = ")
 }

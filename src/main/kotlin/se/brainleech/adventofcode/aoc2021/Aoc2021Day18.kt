@@ -1,7 +1,8 @@
 package se.brainleech.adventofcode.aoc2021
 
-import java.util.stream.Stream
-import kotlin.streams.toList
+import se.brainleech.adventofcode.compute
+import se.brainleech.adventofcode.readLines
+import se.brainleech.adventofcode.verify
 
 class Aoc2021Day18 {
 
@@ -192,14 +193,14 @@ class Aoc2021Day18 {
         return first.asTreeNode().plus(second.asTreeNode()).toString()
     }
 
-    fun part1(input: Stream<String>): Int {
+    fun part1(input: List<String>): Int {
         return input.toList()
             .map { it.asTreeNode() }
             .reduce(SnailfishNumber::plus)
             .magnitude()
     }
 
-    fun part2(input: Stream<String>): Int {
+    fun part2(input: List<String>): Int {
         val list = input.toList()
         return list.indices.flatMap { i -> list.indices.map { j -> i to j } }
             .filter { (i, j) -> i != j }
@@ -210,4 +211,29 @@ class Aoc2021Day18 {
             }
     }
 
+}
+
+fun main() {
+    val solver = Aoc2021Day18()
+    val prefix = "aoc2021/aoc2021day18"
+    val testData = readLines("$prefix.test.txt")
+    val realData = readLines("$prefix.real.txt")
+
+    // test logic
+    verify("[[[[0,9],2],3],4]", solver.testExplodeOnce("[[[[[9,8],1],2],3],4]"))
+    verify("[7,[6,[5,[7,0]]]]", solver.testExplodeOnce("[7,[6,[5,[4,[3,2]]]]]"))
+    verify("[[6,[5,[7,0]]],3]", solver.testExplodeOnce("[[6,[5,[4,[3,2]]]],1]"))
+    verify("[[3,[2,[8,0]]],[9,[5,[4,[3,2]]]]]", solver.testExplodeOnce("[[3,[2,[1,[7,3]]]],[6,[5,[4,[3,2]]]]]"))
+    verify("[[3,[2,[8,0]]],[9,[5,[7,0]]]]", solver.testExplodeOnce("[[3,[2,[8,0]]],[9,[5,[4,[3,2]]]]]"))
+    verify("[[[[0,7],4],[[7,8],[0,13]]],[1,1]]", solver.testSplitOnce("[[[[0,7],4],[15,[0,13]]],[1,1]]"))
+    verify("[[[[0,7],4],[[7,8],[0,[6,7]]]],[1,1]]", solver.testSplitOnce("[[[[0,7],4],[[7,8],[0,13]]],[1,1]]"))
+    verify("[[[[0,7],4],[[7,8],[6,0]]],[8,1]]", solver.testExplodeOnce("[[[[0,7],4],[[7,8],[0,[6,7]]]],[1,1]]"))
+    verify("[[[[0,7],4],[[7,8],[6,0]]],[8,1]]", solver.testReduce("[[[[[4,3],4],4],[7,[[8,4],9]]],[1,1]]"))
+    verify("[[[[0,7],4],[[7,8],[6,0]]],[8,1]]", solver.testPlus("[[[[4,3],4],4],[7,[[8,4],9]]]", "[1,1]"))
+
+    verify(4140, solver.part1(testData))
+    compute({ solver.part1(realData) }, "$prefix.part1 = ")
+
+    verify(3993, solver.part2(testData))
+    compute({ solver.part2(realData) }, "$prefix.part2 = ")
 }

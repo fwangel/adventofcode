@@ -1,5 +1,9 @@
 package se.brainleech.adventofcode.aoc2015
 
+import se.brainleech.adventofcode.compute
+import se.brainleech.adventofcode.readText
+import se.brainleech.adventofcode.verify
+
 class Aoc2015Day03 {
     data class Position(val x: Int, val y: Int) {
         fun move(direction: Char): Position {
@@ -39,4 +43,17 @@ class Aoc2015Day03 {
         return visited.values.count()
     }
 
+}
+
+fun main() {
+    val solver = Aoc2015Day03()
+    val prefix = "aoc2015/aoc2015day03"
+    val testData = readText("$prefix.test.txt")
+    val realData = readText("$prefix.real.txt")
+
+    verify(4, solver.part1(testData))
+    compute({ solver.part1(realData) }, "$prefix.part1 = ")
+
+    verify(3, solver.part2(testData))
+    compute({ solver.part2(realData) }, "$prefix.part2 = ")
 }

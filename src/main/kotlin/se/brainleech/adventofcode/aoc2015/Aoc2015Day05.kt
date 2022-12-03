@@ -1,7 +1,8 @@
 package se.brainleech.adventofcode.aoc2015
 
-import java.util.stream.Stream
-import kotlin.streams.asSequence
+import se.brainleech.adventofcode.compute
+import se.brainleech.adventofcode.readLines
+import se.brainleech.adventofcode.verify
 
 class Aoc2015Day05 {
     companion object {
@@ -13,7 +14,7 @@ class Aoc2015Day05 {
         private val SURROUNDING = Regex("([a-z]).\\1")
     }
 
-    fun part1(input: Stream<String>): Int {
+    fun part1(input: List<String>): Int {
         return input
             .asSequence()
             .filter { !it.contains(NAUGHTY_COMBINATIONS) }
@@ -22,7 +23,7 @@ class Aoc2015Day05 {
             .count()
     }
 
-    fun part2(input: Stream<String>): Int {
+    fun part2(input: List<String>): Int {
         return input
             .asSequence()
             .filter { it.contains(PAIR) }
@@ -30,4 +31,17 @@ class Aoc2015Day05 {
             .count()
     }
 
+}
+
+fun main() {
+    val solver = Aoc2015Day05()
+    val prefix = "aoc2015/aoc2015day05"
+    val testData = readLines("$prefix.test.txt")
+    val realData = readLines("$prefix.real.txt")
+
+    verify(3, solver.part1(testData))
+    compute({ solver.part1(realData) }, "$prefix.part1 = ")
+
+    verify(2, solver.part2(testData))
+    compute({ solver.part2(realData) }, "$prefix.part2 = ")
 }

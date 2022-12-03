@@ -1,7 +1,8 @@
 package se.brainleech.adventofcode.aoc2020
 
-import java.util.stream.Stream
-import kotlin.streams.asSequence
+import se.brainleech.adventofcode.compute
+import se.brainleech.adventofcode.readLines
+import se.brainleech.adventofcode.verify
 
 class Aoc2020Day02 {
 
@@ -38,18 +39,31 @@ class Aoc2020Day02 {
         return PositionBasedPasswordPolicy(limitRule, character.first(), password)
     }
 
-    fun part1(input: Stream<String>): Int {
+    fun part1(input: List<String>): Int {
         return input
             .asSequence()
             .map { it.asPasswordPolicy() }
             .count { it.valid() }
     }
 
-    fun part2(input: Stream<String>): Int {
+    fun part2(input: List<String>): Int {
         return input
             .asSequence()
             .map { it.asPositionBasedPasswordPolicy() }
             .count { it.valid() }
     }
 
+}
+
+fun main() {
+    val solver = Aoc2020Day02()
+    val prefix = "aoc2020/aoc2020day02"
+    val testData = readLines("$prefix.test.txt")
+    val realData = readLines("$prefix.real.txt")
+
+    verify(2, solver.part1(testData))
+    compute({ solver.part1(realData) }, "$prefix.part1 = ")
+
+    verify(1, solver.part2(testData))
+    compute({ solver.part2(realData) }, "$prefix.part2 = ")
 }

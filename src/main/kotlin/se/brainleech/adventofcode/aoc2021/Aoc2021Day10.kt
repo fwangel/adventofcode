@@ -1,8 +1,9 @@
 package se.brainleech.adventofcode.aoc2021
 
+import se.brainleech.adventofcode.compute
+import se.brainleech.adventofcode.readLines
+import se.brainleech.adventofcode.verify
 import java.util.*
-import java.util.stream.Stream
-import kotlin.streams.asSequence
 
 class Aoc2021Day10 {
 
@@ -59,13 +60,12 @@ class Aoc2021Day10 {
         }
     }
 
-    fun part1(input: Stream<String>): Long {
+    fun part1(input: List<String>): Long {
         return input
-            .asSequence()
             .sumOf { line -> SyntaxChecker(line).syntaxErrorScore() }
     }
 
-    fun part2(input: Stream<String>): Long {
+    fun part2(input: List<String>): Long {
         val missingScores = input
             .asSequence()
             .map { line -> SyntaxChecker(line) }
@@ -77,4 +77,17 @@ class Aoc2021Day10 {
         return missingScores.drop(missingScores.size / 2).first()
     }
 
+}
+
+fun main() {
+    val solver = Aoc2021Day10()
+    val prefix = "aoc2021/aoc2021day10"
+    val testData = readLines("$prefix.test.txt")
+    val realData = readLines("$prefix.real.txt")
+
+    verify(26_397L, solver.part1(testData))
+    compute({ solver.part1(realData) }, "$prefix.part1 = ")
+
+    verify(288_957L, solver.part2(testData))
+    compute({ solver.part2(realData) }, "$prefix.part2 = ")
 }

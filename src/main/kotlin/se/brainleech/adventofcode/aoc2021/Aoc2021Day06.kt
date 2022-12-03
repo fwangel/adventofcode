@@ -1,6 +1,9 @@
 package se.brainleech.adventofcode.aoc2021
 
+import se.brainleech.adventofcode.compute
+import se.brainleech.adventofcode.readText
 import se.brainleech.adventofcode.toListOfInts
+import se.brainleech.adventofcode.verify
 
 class Aoc2021Day06 {
     companion object {
@@ -51,4 +54,19 @@ class Aoc2021Day06 {
         return solve(input.toListOfInts(), days)
     }
 
+}
+
+fun main() {
+    val solver = Aoc2021Day06()
+    val prefix = "aoc2021/aoc2021day06"
+    val testData = readText("$prefix.test.txt")
+    val realData = readText("$prefix.real.txt")
+
+    verify(26L, solver.part1(testData, 18))
+    verify(59_34L, solver.part1(testData, 80))
+    verify(379_114L, solver.part1(realData, 80))
+    compute({ solver.part1(realData, 80) }, "$prefix.part1 = ")
+
+    verify(26_984_457_539L, solver.part2(testData, 256))
+    compute({ solver.part2(realData, 256) }, "$prefix.part2 = ")
 }

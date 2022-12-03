@@ -1,7 +1,8 @@
 package se.brainleech.adventofcode.aoc2022
 
-import java.util.stream.Stream
-import kotlin.streams.asSequence
+import se.brainleech.adventofcode.compute
+import se.brainleech.adventofcode.readLines
+import se.brainleech.adventofcode.verify
 
 class Aoc2022Day03 {
 
@@ -24,14 +25,14 @@ class Aoc2022Day03 {
             .sum()
     }
 
-    fun part1(input: Stream<String>): Int {
+    fun part1(input: List<String>): Int {
         return input
             .asSequence()
             .map { it.firstHalf().prioritiesBy(it.secondHalf()) }
             .sum()
     }
 
-    fun part2(input: Stream<String>): Int {
+    fun part2(input: List<String>): Int {
         return input
             .asSequence()
             .chunked(size = 3)
@@ -40,4 +41,17 @@ class Aoc2022Day03 {
             .sum()
     }
 
+}
+
+fun main() {
+    val solver = Aoc2022Day03()
+    val prefix = "aoc2022/aoc2022day03"
+    val testData = readLines("$prefix.test.txt")
+    val realData = readLines("$prefix.real.txt")
+
+    verify(157, solver.part1(testData))
+    compute({ solver.part1(realData) }, "$prefix.part1 = ")
+
+    verify(70, solver.part2(testData))
+    compute({ solver.part2(realData) }, "$prefix.part2 = ")
 }

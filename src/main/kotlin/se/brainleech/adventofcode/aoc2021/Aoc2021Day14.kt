@@ -1,9 +1,10 @@
 package se.brainleech.adventofcode.aoc2021
 
+import se.brainleech.adventofcode.compute
+import se.brainleech.adventofcode.readLines
 import se.brainleech.adventofcode.sortedByChar
+import se.brainleech.adventofcode.verify
 import java.util.*
-import java.util.stream.Stream
-import kotlin.streams.toList
 
 class Aoc2021Day14 {
 
@@ -119,7 +120,7 @@ class Aoc2021Day14 {
 
     }
 
-    private fun Stream<String>.asPolymer(simulated: Boolean = false): PolymerExpander {
+    private fun List<String>.asPolymer(simulated: Boolean = false): PolymerExpander {
         val lines = this.toList()
         val template = lines.first()
         val rules = lines
@@ -133,12 +134,25 @@ class Aoc2021Day14 {
         else RealPolymerExpander(template, rules)
     }
 
-    fun part1(input: Stream<String>): Long {
+    fun part1(input: List<String>): Long {
         return input.asPolymer(simulated = false).process(10).maxMinusMinQuantity()
     }
 
-    fun part2(input: Stream<String>): Long {
+    fun part2(input: List<String>): Long {
         return input.asPolymer(simulated = true).process(40).maxMinusMinQuantity()
     }
 
+}
+
+fun main() {
+    val solver = Aoc2021Day14()
+    val prefix = "aoc2021/aoc2021day14"
+    val testData = readLines("$prefix.test.txt")
+    val realData = readLines("$prefix.real.txt")
+
+    verify(1_588L, solver.part1(testData))
+    compute({ solver.part1(realData) }, "$prefix.part1 = ")
+
+    verify(2_188_189_693_529L, solver.part2(testData))
+    compute({ solver.part2(realData) }, "$prefix.part2 = ")
 }

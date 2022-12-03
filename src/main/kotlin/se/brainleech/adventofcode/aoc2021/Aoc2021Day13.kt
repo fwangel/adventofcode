@@ -1,5 +1,9 @@
 package se.brainleech.adventofcode.aoc2021
 
+import se.brainleech.adventofcode.compute
+import se.brainleech.adventofcode.readText
+import se.brainleech.adventofcode.verify
+
 class Aoc2021Day13 {
 
     companion object {
@@ -125,4 +129,27 @@ class Aoc2021Day13 {
         return input.asPaper().foldAll().toAsciiArt()
     }
 
+}
+
+fun main() {
+    val solver = Aoc2021Day13()
+    val prefix = "aoc2021/aoc2021day13"
+    val testData = readText("$prefix.test.txt")
+    val realData = readText("$prefix.real.txt")
+
+    val square = """
+        #####
+        #...#
+        #...#
+        #...#
+        #####
+        .....
+        .....
+    """.trimIndent()
+
+    verify(17, solver.part1(testData))
+    compute({ solver.part1(realData) }, "$prefix.part1 = ")
+
+    verify(square, solver.part2(testData))
+    compute({ solver.part2(realData) }, "$prefix.part2 = \n")
 }

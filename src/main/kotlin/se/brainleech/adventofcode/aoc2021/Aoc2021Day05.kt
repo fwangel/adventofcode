@@ -1,6 +1,8 @@
 package se.brainleech.adventofcode.aoc2021
 
-import java.util.stream.Stream
+import se.brainleech.adventofcode.compute
+import se.brainleech.adventofcode.readLines
+import se.brainleech.adventofcode.verify
 
 class Aoc2021Day05 {
 
@@ -84,7 +86,7 @@ class Aoc2021Day05 {
         return Line(points.first(), points.last())
     }
 
-    fun part1(input: Stream<String>): Int {
+    fun part1(input: List<String>): Int {
         val space = Space()
         input
             .map { it.asLine() }
@@ -95,7 +97,7 @@ class Aoc2021Day05 {
         return space.countDangerousPoints()
     }
 
-    fun part2(input: Stream<String>): Int {
+    fun part2(input: List<String>): Int {
         val space = Space()
         input
             .map { it.asLine() }
@@ -105,4 +107,17 @@ class Aoc2021Day05 {
         return space.countDangerousPoints()
     }
 
+}
+
+fun main() {
+    val solver = Aoc2021Day05()
+    val prefix = "aoc2021/aoc2021day05"
+    val testData = readLines("$prefix.test.txt")
+    val realData = readLines("$prefix.real.txt")
+
+    verify(5, solver.part1(testData))
+    compute({ solver.part1(realData) }, "$prefix.part1 = ")
+
+    verify(12, solver.part2(testData))
+    compute({ solver.part2(realData) }, "$prefix.part2 = ")
 }

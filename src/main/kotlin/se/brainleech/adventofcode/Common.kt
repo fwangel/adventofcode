@@ -1,41 +1,32 @@
 package se.brainleech.adventofcode
 
-import java.nio.file.Files
-import java.nio.file.Paths
+import java.io.File
+import java.util.*
 import java.util.stream.Collectors
-import java.util.stream.IntStream
-import java.util.stream.Stream
+import kotlin.streams.toList
 
-fun out(value: Any, prefix: String = ""): Any {
-    print(prefix)
-    println(value)
+fun <T> verify(expected: T, actual: T) {
+    check(expected == actual) { "Expected: `$expected`, found: `$actual`" }
+}
+
+inline fun compute(block: () -> Any, prefix: String = ""): Any {
+    val start = System.nanoTime()
+    val value = block()
+    val elapsed = String.format(Locale.ENGLISH, "%.3f", (System.nanoTime() - start) / 1_000_000.0).padStart(9)
+    println("(${elapsed}ms) $prefix $value")
     return value
 }
 
-fun out(value: IntArray, prefix: String = ""): IntArray {
-    print(prefix)
-    println(value.asList())
-    return value
+fun readLines(filename: String): List<String> {
+    return File("src/main/resources", filename).readLines()
 }
 
-fun out(value: List<IntArray>, prefix: String = ""): List<IntArray> {
-    print(prefix)
-    println(value.map { it.asList() })
-    return value
-}
-
-fun readLines(filename: String): Stream<String> {
-    val resource = checkNotNull(ClassLoader.getSystemClassLoader().getResource(filename))
-    val path = Paths.get(resource.toURI())
-    return Files.lines(path)
-}
-
-fun readIntegers(filename: String): IntStream {
-    return readLines(filename).mapToInt(String::toInt)
+fun readIntegers(filename: String): List<Int> {
+    return readLines(filename).stream().mapToInt(String::toInt).toList()
 }
 
 fun readText(filename: String): String {
-    return readLines(filename).collect(Collectors.joining("\n"))
+    return readLines(filename).stream().collect(Collectors.joining("\n"))
 }
 
 fun String.toListOfInts(): List<Int> {

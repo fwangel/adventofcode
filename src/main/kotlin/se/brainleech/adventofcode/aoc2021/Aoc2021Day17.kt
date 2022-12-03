@@ -1,5 +1,8 @@
 package se.brainleech.adventofcode.aoc2021
 
+import se.brainleech.adventofcode.compute
+import se.brainleech.adventofcode.readText
+import se.brainleech.adventofcode.verify
 import kotlin.math.abs
 import kotlin.math.sign
 
@@ -97,4 +100,17 @@ class Aoc2021Day17 {
         return input.toProbe().solve().solutions.size
     }
 
+}
+
+fun main() {
+    val solver = Aoc2021Day17()
+    val prefix = "aoc2021/aoc2021day17"
+    val testData = readText("$prefix.test.txt")
+    val realData = readText("$prefix.real.txt")
+
+    verify(45, solver.part1(testData))
+    compute({ solver.part1(realData) }, "$prefix.part1 = ")
+
+    verify(112, solver.part2(testData))
+    compute({ solver.part2(realData) }, "$prefix.part2 = ")
 }

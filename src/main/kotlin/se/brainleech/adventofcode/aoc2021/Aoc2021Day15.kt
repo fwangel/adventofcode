@@ -1,9 +1,10 @@
 package se.brainleech.adventofcode.aoc2021
 
+import se.brainleech.adventofcode.compute
+import se.brainleech.adventofcode.readLines
+import se.brainleech.adventofcode.verify
 import java.util.*
-import java.util.stream.Stream
 import kotlin.math.sign
-import kotlin.streams.toList
 
 class Aoc2021Day15 {
 
@@ -100,7 +101,7 @@ class Aoc2021Day15 {
 
     }
 
-    private fun Stream<String>.asCavern(expanded: Boolean = false): Cavern {
+    private fun List<String>.asCavern(expanded: Boolean = false): Cavern {
         this.map { line -> line.toCharArray().map { char -> char.digitToInt() }.toIntArray() }.toList()
             .let { riskLevels ->
                 val height = riskLevels.count()
@@ -113,16 +114,29 @@ class Aoc2021Day15 {
             }
     }
 
-    fun part1(input: Stream<String>): Int {
+    fun part1(input: List<String>): Int {
         return input
             .asCavern()
             .minimumRisk()
     }
 
-    fun part2(input: Stream<String>): Int {
+    fun part2(input: List<String>): Int {
         return input
             .asCavern(expanded = true)
             .minimumRisk()
     }
 
+}
+
+fun main() {
+    val solver = Aoc2021Day15()
+    val prefix = "aoc2021/aoc2021day15"
+    val testData = readLines("$prefix.test.txt")
+    val realData = readLines("$prefix.real.txt")
+
+    verify(40, solver.part1(testData))
+    compute({ solver.part1(realData) }, "$prefix.part1 = ")
+
+    verify(315, solver.part2(testData))
+    compute({ solver.part2(realData) }, "$prefix.part2 = ")
 }

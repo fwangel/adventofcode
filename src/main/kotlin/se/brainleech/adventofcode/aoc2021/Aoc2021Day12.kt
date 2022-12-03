@@ -1,7 +1,8 @@
 package se.brainleech.adventofcode.aoc2021
 
-import java.util.stream.Stream
-import kotlin.streams.asSequence
+import se.brainleech.adventofcode.compute
+import se.brainleech.adventofcode.readLines
+import se.brainleech.adventofcode.verify
 
 class Aoc2021Day12 {
 
@@ -57,7 +58,7 @@ class Aoc2021Day12 {
 
     }
 
-    private fun Stream<String>.asCaveSystem(maxSmallCaveVisits: Int = 1): CaveSystem {
+    private fun List<String>.asCaveSystem(maxSmallCaveVisits: Int = 1): CaveSystem {
         return CaveSystem(maxSmallCaveVisits, this
             .asSequence()
             .flatMap {
@@ -70,12 +71,25 @@ class Aoc2021Day12 {
         )
     }
 
-    fun part1(input: Stream<String>): Int {
+    fun part1(input: List<String>): Int {
         return input.asCaveSystem().findAllPathsFrom(CAVE_START).size
     }
 
-    fun part2(input: Stream<String>): Int {
+    fun part2(input: List<String>): Int {
         return input.asCaveSystem(maxSmallCaveVisits = 2).findAllPathsFrom(CAVE_START).size
     }
 
+}
+
+fun main() {
+    val solver = Aoc2021Day12()
+    val prefix = "aoc2021/aoc2021day12"
+    val testData = readLines("$prefix.test.txt")
+    val realData = readLines("$prefix.real.txt")
+
+    verify(226, solver.part1(testData))
+    compute({ solver.part1(realData) }, "$prefix.part1 = ")
+
+    verify(3_509, solver.part2(testData))
+    compute({ solver.part2(realData) }, "$prefix.part2 = ")
 }

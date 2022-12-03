@@ -1,5 +1,9 @@
 package se.brainleech.adventofcode.aoc2020
 
+import se.brainleech.adventofcode.compute
+import se.brainleech.adventofcode.readText
+import se.brainleech.adventofcode.verify
+
 class Aoc2020Day04 {
 
     companion object {
@@ -96,4 +100,17 @@ class Aoc2020Day04 {
             .toLong()
     }
 
+}
+
+fun main() {
+    val solver = Aoc2020Day04()
+    val prefix = "aoc2020/aoc2020day04"
+    val testData = readText("$prefix.test.txt")
+    val realData = readText("$prefix.real.txt")
+
+    verify(10L, solver.part1(testData))
+    compute({ solver.part1(realData) }, "$prefix.part1 = ")
+
+    verify(6L, solver.part2(testData))
+    compute({ solver.part2(realData) }, "$prefix.part2 = ")
 }

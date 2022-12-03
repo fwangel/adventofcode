@@ -1,8 +1,9 @@
 package se.brainleech.adventofcode.aoc2021
 
+import se.brainleech.adventofcode.compute
+import se.brainleech.adventofcode.readLines
 import se.brainleech.adventofcode.sortedByChar
-import java.util.stream.Stream
-import kotlin.streams.asSequence
+import se.brainleech.adventofcode.verify
 
 class Aoc2021Day08 {
 
@@ -80,7 +81,7 @@ class Aoc2021Day08 {
         return NotebookEntry(rawPatterns.asCharSortedPatterns(), rawDigitOutputs.asCharSortedPatterns())
     }
 
-    fun part1(input: Stream<String>): Int {
+    fun part1(input: List<String>): Int {
         // count number of occurrences of 1, 4, 7, and 8
         return input
             .asSequence()
@@ -91,7 +92,7 @@ class Aoc2021Day08 {
             }.sum()
     }
 
-    fun part2(input: Stream<String>): Long {
+    fun part2(input: List<String>): Long {
         return input
             .asSequence()
             .map { it.asNotebookEntry() }
@@ -104,4 +105,17 @@ class Aoc2021Day08 {
             }.sum()
     }
 
+}
+
+fun main() {
+    val solver = Aoc2021Day08()
+    val prefix = "aoc2021/aoc2021day08"
+    val testData = readLines("$prefix.test.txt")
+    val realData = readLines("$prefix.real.txt")
+
+    verify(26, solver.part1(testData))
+    compute({ solver.part1(realData) }, "$prefix.part1 = ")
+
+    verify(61_229L, solver.part2(testData))
+    compute({ solver.part2(realData) }, "$prefix.part2 = ")
 }

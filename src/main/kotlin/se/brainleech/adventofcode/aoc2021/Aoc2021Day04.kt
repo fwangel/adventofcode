@@ -1,7 +1,8 @@
 package se.brainleech.adventofcode.aoc2021
 
-import java.util.stream.Stream
-import kotlin.streams.toList
+import se.brainleech.adventofcode.compute
+import se.brainleech.adventofcode.readLines
+import se.brainleech.adventofcode.verify
 
 class Aoc2021Day04 {
 
@@ -144,7 +145,7 @@ class Aoc2021Day04 {
         return game
     }
 
-    fun part1(input: Stream<String>): Int {
+    fun part1(input: List<String>): Int {
         val game = parse(input.toList())
 
         game.numbers.forEach { number ->
@@ -159,7 +160,7 @@ class Aoc2021Day04 {
         return -1
     }
 
-    fun part2(input: Stream<String>): Int {
+    fun part2(input: List<String>): Int {
         val game = parse(input.toList())
 
         game.numbers.forEach { number ->
@@ -174,4 +175,17 @@ class Aoc2021Day04 {
         return -1
     }
 
+}
+
+fun main() {
+    val solver = Aoc2021Day04()
+    val prefix = "aoc2021/aoc2021day04"
+    val testData = readLines("$prefix.test.txt")
+    val realData = readLines("$prefix.real.txt")
+
+    verify(4512, solver.part1(testData))
+    compute({ solver.part1(realData) }, "$prefix.part1 = ")
+
+    verify(1924, solver.part2(testData))
+    compute({ solver.part2(realData) }, "$prefix.part2 = ")
 }

@@ -1,8 +1,9 @@
 package se.brainleech.adventofcode.aoc2021
 
+import se.brainleech.adventofcode.compute
+import se.brainleech.adventofcode.readLines
+import se.brainleech.adventofcode.verify
 import java.util.stream.Collectors
-import java.util.stream.Stream
-import kotlin.streams.toList
 
 class Aoc2021Day03 {
 
@@ -55,8 +56,8 @@ class Aoc2021Day03 {
         return this.withIndex().sumOf { it.value shl (this.size - 1 - it.index) }
     }
 
-    fun part1(source: Stream<String>): Int {
-        val input = source
+    fun part1(source: List<String>): Int {
+        val input = source.stream()
             .map { bits ->
                 bits.toCharArray()
                     .map { bit -> bit.digitToInt() }
@@ -73,7 +74,7 @@ class Aoc2021Day03 {
         return gamma * epsilon
     }
 
-    fun part2(source: Stream<String>): Int {
+    fun part2(source: List<String>): Int {
         val input = source
             .map { bits ->
                 bits.toCharArray()
@@ -112,4 +113,17 @@ class Aoc2021Day03 {
         return oxygen * co2
     }
 
+}
+
+fun main() {
+    val solver = Aoc2021Day03()
+    val prefix = "aoc2021/aoc2021day03"
+    val testData = readLines("$prefix.test.txt")
+    val realData = readLines("$prefix.real.txt")
+
+    verify(198, solver.part1(testData))
+    compute({ solver.part1(realData) }, "$prefix.part1 = ")
+
+    verify(230, solver.part2(testData))
+    compute({ solver.part2(realData) }, "$prefix.part2 = ")
 }

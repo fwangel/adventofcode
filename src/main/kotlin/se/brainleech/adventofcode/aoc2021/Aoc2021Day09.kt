@@ -1,5 +1,8 @@
 package se.brainleech.adventofcode.aoc2021
 
+import se.brainleech.adventofcode.compute
+import se.brainleech.adventofcode.readLines
+import se.brainleech.adventofcode.verify
 import java.util.stream.Stream
 import kotlin.streams.toList
 
@@ -77,15 +80,15 @@ class Aoc2021Day09 {
         return Heightmap(rows, columns, heights)
     }
 
-    fun part1(input: Stream<String>): Long {
-        return input
+    fun part1(input: List<String>): Long {
+        return input.stream()
             .asHeightmap()
             .lowPoints()
             .sumOf { it.height + 1 }
     }
 
-    fun part2(input: Stream<String>): Long {
-        return input
+    fun part2(input: List<String>): Long {
+        return input.stream()
             .asHeightmap()
             .basinSizes(3)
             .reduce { totalBasinSize, basinSize -> totalBasinSize.times(basinSize) }
@@ -93,3 +96,15 @@ class Aoc2021Day09 {
 
 }
 
+fun main() {
+    val solver = Aoc2021Day09()
+    val prefix = "aoc2021/aoc2021day09"
+    val testData = readLines("$prefix.test.txt")
+    val realData = readLines("$prefix.real.txt")
+
+    verify(15L, solver.part1(testData))
+    compute({ solver.part1(realData) }, "$prefix.part1 = ")
+
+    verify(1_134L, solver.part2(testData))
+    compute({ solver.part2(realData) }, "$prefix.part2 = ")
+}

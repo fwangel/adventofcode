@@ -1,6 +1,8 @@
 package se.brainleech.adventofcode.aoc2022
 
-import java.util.stream.Stream
+import se.brainleech.adventofcode.compute
+import se.brainleech.adventofcode.readLines
+import se.brainleech.adventofcode.verify
 
 class Aoc2022Day02 {
 
@@ -35,18 +37,29 @@ class Aoc2022Day02 {
         return ("$opponent $encoded").score()
     }
 
-    fun part1(input: Stream<String>): Int {
+    fun part1(input: List<String>): Int {
         return input
             .map { it.score() }
             .reduce { total, score -> total.plus(score) }
-            .orElse(0)
     }
 
-    fun part2(input: Stream<String>): Int {
+    fun part2(input: List<String>): Int {
         return input
             .map { it.scoreByExpectedOutcome() }
             .reduce { total, score -> total.plus(score) }
-            .orElse(0)
     }
 
+}
+
+fun main() {
+    val solver = Aoc2022Day02()
+    val prefix = "aoc2022/aoc2022day02"
+    val testData = readLines("$prefix.test.txt")
+    val realData = readLines("$prefix.real.txt")
+
+    verify(15, solver.part1(testData))
+    compute({ solver.part1(realData) }, "$prefix.part1 = ")
+
+    verify(12, solver.part2(testData))
+    compute({ solver.part2(realData) }, "$prefix.part2 = ")
 }

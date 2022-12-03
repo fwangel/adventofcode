@@ -1,5 +1,8 @@
 package se.brainleech.adventofcode.aoc2021
 
+import se.brainleech.adventofcode.compute
+import se.brainleech.adventofcode.readText
+import se.brainleech.adventofcode.verify
 import java.math.BigInteger
 
 class Aoc2021Day16 {
@@ -116,4 +119,31 @@ class Aoc2021Day16 {
         return input.toPacket().value
     }
 
+}
+
+fun main() {
+    val solver = Aoc2021Day16()
+    val prefix = "aoc2021/aoc2021day16"
+    val testData = readText("$prefix.test.txt")
+    val realData = readText("$prefix.real.txt")
+
+    verify(6L, solver.part1("D2FE28"))
+    verify(9L, solver.part1("38006F45291200"))
+    verify(14L, solver.part1("EE00D40C823060"))
+    verify(16L, solver.part1("8A004A801A8002F478"))
+    verify(12L, solver.part1("620080001611562C8802118E34"))
+    verify(23L, solver.part1("C0015000016115A2E0802F182340"))
+    verify(31L, solver.part1(testData))
+    compute({ solver.part1(realData) }, "$prefix.part1 = ")
+
+    verify(3.toBigInteger(), solver.part2("C200B40A82"))
+    verify(54.toBigInteger(), solver.part2("04005AC33890"))
+    verify(7.toBigInteger(), solver.part2("880086C3E88112"))
+    verify(9.toBigInteger(), solver.part2("CE00C43D881120"))
+    verify(1.toBigInteger(), solver.part2("D8005AC2A8F0"))
+    verify(0.toBigInteger(), solver.part2("F600BC2D8F"))
+    verify(0.toBigInteger(), solver.part2("9C005AC2F8F0"))
+    verify(1.toBigInteger(), solver.part2("9C0141080250320F1802104A08"))
+    verify(54.toBigInteger(), solver.part2(testData))
+    compute({ solver.part2(realData) }, "$prefix.part2 = ")
 }
