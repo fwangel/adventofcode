@@ -8,18 +8,15 @@ class Aoc2022Day03 {
 
     private fun String.firstHalf() = this.substring(0, (this.length / 2))
     private fun String.secondHalf() = this.substring(this.length / 2)
-    private fun String.prioritiesBy(other: String) : Int {
-        return prioritiesBy(other, "")
-    }
 
-    private fun String.prioritiesBy(second: String, third: String) : Int {
-        val secondChars = second.chars().sorted().toArray()
-        val thirdChars = third.chars().sorted().toArray()
-        return this.chars().sorted().toArray()
+    private fun String.prioritiesBy(second: String, third: String = "") : Int {
+        val secondChars = second.toCharArray()
+        val thirdChars = third.toCharArray()
+        return this.toCharArray()
             .filter { ch -> secondChars.contains(ch) && (thirdChars.isEmpty() || thirdChars.contains(ch)) }
             .map { ch ->
-                if (ch in 65..90) ch - 'A'.code + 27
-                else ch - 'a'.code + 1
+                if (ch in 'A'..'Z') ch - 'A' + 27
+                else ch - 'a' + 1
             }
             .distinct()
             .sum()
