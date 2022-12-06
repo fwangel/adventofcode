@@ -9,12 +9,10 @@ class Aoc2022Day06 {
     private fun process(input: String, packetSize: Int) : Int {
         if (input.length < packetSize) return -1
         return input
-            .toCharArray()
             .asSequence()
             .windowed(size = packetSize,  partialWindows = false)
-            .map { it.distinct() }
             .withIndex()
-            .filter { it.value.size == packetSize }
+            .filter { it.value.distinct().size == packetSize }
             .map { it.index + packetSize }
             .first()
     }
