@@ -1,7 +1,8 @@
 package se.brainleech.adventofcode
 
 import java.io.File
-import java.time.Year
+import kotlin.io.path.Path
+import kotlin.io.path.createDirectories
 
 fun createDay(year: Int, day: Int) {
     val basePackage = "package se.brainleech.adventofcode"
@@ -21,9 +22,11 @@ fun createDay(year: Int, day: Int) {
             .replace("<day>", day.toString().padStart(2, '0'))
             .replace("DayTemplate", className)
             .replace(basePackage, packageName)
+        classFile.toPath().parent.createDirectories()
         classFile.writeText(classCode)
     }
 
+    Path(testParent).createDirectories()
     val realDataFile = File(testParent, className.lowercase() + ".real.txt")
     if (!realDataFile.exists()) {
         println("   and ${testParent}/${className.lowercase()}.real.txt ...")
@@ -38,7 +41,7 @@ fun createDay(year: Int, day: Int) {
 }
 
 fun main() {
-    val year = Year.now().value
+    val year = 2016
     for (day in 1..25) {
         createDay(year, day)
     }
