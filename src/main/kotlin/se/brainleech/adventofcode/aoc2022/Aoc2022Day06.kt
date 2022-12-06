@@ -24,20 +24,12 @@ class Aoc2022Day06 {
 fun main() {
     val solver = Aoc2022Day06()
     val prefix = "aoc2022/aoc2022day06"
-    val testData = readLines("$prefix.test.txt").first()
-    val realData = readLines("$prefix.real.txt").first()
+    val testData = readLines("$prefix.test.txt")
+    val realData = readLines("$prefix.real.txt")
 
-    verify(7, solver.part1(testData))
-    verify(5, solver.part1("bvwbjplbgvbhsrlpgdmjqwftvncz"))
-    verify(6, solver.part1("nppdvjthqldpwncqszvftbrmjlhg"))
-    verify(10, solver.part1("nznrnfrfntjfmvfwmzdfjlvtqnbhcprsg"))
-    verify(11, solver.part1("zcfzfwzzqfrljwzlrfnpqdbhtmscgvjw"))
-    compute({ solver.part1(realData) }, "$prefix.part1 = ")
+    listOf(7, 5, 6, 10, 11).forEachIndexed { index, expected -> verify(expected, solver.part1(testData[index])) }
+    compute({ solver.part1(realData.first()) }, "$prefix.part1 = ")
 
-    verify(19, solver.part2(testData))
-    verify(23, solver.part2("bvwbjplbgvbhsrlpgdmjqwftvncz"))
-    verify(23, solver.part2("nppdvjthqldpwncqszvftbrmjlhg"))
-    verify(29, solver.part2("nznrnfrfntjfmvfwmzdfjlvtqnbhcprsg"))
-    verify(26, solver.part2("zcfzfwzzqfrljwzlrfnpqdbhtmscgvjw"))
-    compute({ solver.part2(realData) }, "$prefix.part2 = ")
+    listOf(19, 23, 23, 29, 26).forEachIndexed { index, expected -> verify(expected, solver.part2(testData[index])) }
+    compute({ solver.part2(realData.first()) }, "$prefix.part2 = ")
 }
