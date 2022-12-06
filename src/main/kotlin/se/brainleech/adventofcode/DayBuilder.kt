@@ -39,7 +39,7 @@ fun createDay(year: Int, day: Int) {
 
 fun main() {
     val year = Year.now().value
-    for (day in 1..24) {
+    for (day in 1..25) {
         createDay(year, day)
     }
     println("Done!")
