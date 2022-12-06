@@ -13,7 +13,7 @@ inline fun compute(block: () -> Any, prefix: String = ""): Any {
     val start = System.nanoTime()
     val value = block()
     val elapsed = String.format(Locale.ENGLISH, "%.3f", (System.nanoTime() - start) / 1_000_000.0).padStart(9)
-    println("(${elapsed}ms) $prefix $value")
+    println("(${elapsed}ms) $prefix$value")
     return value
 }
 
