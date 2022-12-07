@@ -53,7 +53,7 @@ class Aoc2022Day07 {
 
     private fun List<String>.toFileSystem() : MutableMap<String, Directory> {
         if (this.isEmpty()) return mutableMapOf()
-        val lines = mutableListOf<String>().also { it.addAll(this) }.also { it.add("$ exit") }
+        val lines = this.toMutableList().also { it.add("$ exit") }
         val fileSystem = mutableMapOf("/" to Directory("/"))
         val currentPath = mutableListOf("/")
         while (lines.isNotEmpty()) {
