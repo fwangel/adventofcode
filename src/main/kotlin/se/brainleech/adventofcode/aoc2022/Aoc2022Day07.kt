@@ -7,19 +7,15 @@ import se.brainleech.adventofcode.verify
 class Aoc2022Day07 {
     interface FileOrDirectory {
         val name: String
-        val directory: Boolean
         fun size() : Int
     }
 
-    data class File(override val name: String,
-                    val size: Int,
-                    override val directory: Boolean = false) : FileOrDirectory {
+    data class File(override val name: String, val size: Int) : FileOrDirectory {
         override fun size() = size
     }
 
     data class Directory(override val name: String,
-                         private var contents: MutableList<FileOrDirectory> = mutableListOf(),
-                         override val directory: Boolean = true) : FileOrDirectory {
+                         private var contents: MutableList<FileOrDirectory> = mutableListOf()) : FileOrDirectory {
         fun addEntry(entry: String) {
             val (info, name) = entry.split(" ")
             when (info) {
@@ -30,10 +26,8 @@ class Aoc2022Day07 {
 
         fun getDirectory(name: String) : Directory {
             return contents
-                .filter { entry -> entry.directory }
-                .filter { entry -> entry.name == name }
-                .map { entry -> entry as Directory }
-                .firstOrNull() ?: Directory(name)
+                .filterIsInstance<Directory>()
+                .firstOrNull { entry -> entry.name == name } ?: Directory(name)
         }
 
         override fun size() = contents.sumOf { entry -> entry.size() }
@@ -44,6 +38,10 @@ class Aoc2022Day07 {
     private fun String.listsAnything() = !this.startsWith("$ ")
 
     private fun String.argument() = this.substringAfterLast(' ')
+
+    private fun MutableList<String>.nextCommand() = this.removeFirst()
+
+    private fun MutableList<String>.nextEntry() = this.removeFirst()
 
     private fun MutableList<String>.root() = this.clear().also { this.add("/") }
 
@@ -59,20 +57,21 @@ class Aoc2022Day07 {
         val fileSystem = mutableMapOf("/" to Directory("/"))
         val currentPath = mutableListOf("/")
         while (lines.isNotEmpty()) {
-            val line = lines.removeFirst()
-            if (line invokes "cd /") {
-                currentPath.root()
-            } else if (line invokes "cd ..") {
-                currentPath.parent()
-            } else if (line invokes "cd ") {
-                val directoryName = line.argument()
-                val subDirectory = fileSystem[currentPath.path()]!!.getDirectory(directoryName)
-                currentPath.cd(directoryName)
-                fileSystem.putIfAbsent(currentPath.path(), subDirectory)
-            } else if (line invokes "ls") {
-                val path = currentPath.path()
-                while (lines.first().listsAnything()) {
-                    fileSystem[path]!!.addEntry(lines.removeFirst())
+            val commandLine = lines.nextCommand()
+            when {
+                commandLine invokes "cd /" -> currentPath.root()
+                commandLine invokes "cd .." -> currentPath.parent()
+                commandLine invokes "cd " -> {
+                    val directoryName = commandLine.argument()
+                    val subDirectory = fileSystem[currentPath.path()]!!.getDirectory(directoryName)
+                    currentPath.cd(directoryName)
+                    fileSystem.putIfAbsent(currentPath.path(), subDirectory)
+                }
+                commandLine invokes "ls" -> {
+                    val path = currentPath.path()
+                    while (lines.first().listsAnything()) {
+                        fileSystem[path]!!.addEntry(lines.nextEntry())
+                    }
                 }
             }
         }
