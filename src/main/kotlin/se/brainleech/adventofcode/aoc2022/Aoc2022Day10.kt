@@ -7,8 +7,8 @@ import se.brainleech.adventofcode.verify
 class Aoc2022Day10 {
 
     companion object {
-        const val DEBUG = true
-        const val TRACE = true
+        const val DEBUG = false
+        const val TRACE = false
 
         inline fun <T> T.trace(block: (T) -> Unit): T {
             if (TRACE) block(this)
@@ -21,7 +21,37 @@ class Aoc2022Day10 {
         }
     }
 
-    data class Cpu(private var x: Int = 1) {
+    data class Crt(val width: Int = 40, val height: Int = 6) {
+        private val pixels = ".".repeat(width * height).toCharArray()
+        private var horizontal = 0
+        private var vertical = 0
+        private var spritePosition = 0
+
+        fun updateBeam(cycle: Int) {
+            horizontal = cycle % width
+            vertical = cycle / width
+            drawSprite()
+
+            trace { println(this) }
+        }
+
+        fun updateSpritePosition(spritePosition: Int) {
+            this.spritePosition = spritePosition
+        }
+
+        private fun drawSprite() {
+            trace { println("h:$horizontal, v:$vertical, sprite pos:$spritePosition") }
+
+            val pixelValue = if (horizontal in listOf(spritePosition - 1, spritePosition, spritePosition + 1)) '#' else '.'
+            pixels[(vertical * width) + horizontal] = pixelValue
+        }
+
+        override fun toString(): String {
+            return pixels.asSequence().chunked(width).map { it.joinToString("") }.joinToString("\n")
+        }
+    }
+
+    data class Cpu(private var x: Int = 1, private val crt: Crt? = null) {
         private var cycle = 1
         private var strength = 0
         private var justMeasured = false
@@ -33,6 +63,9 @@ class Aoc2022Day10 {
 
         private fun step() : Cpu {
             justMeasured = false
+
+            crt?.updateBeam(cycle -1)
+
             cycle++
             if (cycle == 20 || ((cycle - 20) % 40 == 0)) {
                 strength += cycle.times(x)
@@ -41,12 +74,12 @@ class Aoc2022Day10 {
             return this
         }
 
-        fun process(instruction: String, argument: String) {
+        fun invoke(instruction: String, argument: String) {
             trace { println("cycle:$cycle, $instruction $argument, current x: $x") }
 
             val strengthBefore = strength
             when (instruction) {
-                "addx" -> step().then { x += argument.toInt() }.then { step() }
+                "addx" -> step().then { x += argument.toInt() }.then { step() }.then { crt?.updateSpritePosition(x) }
                 "noop" -> step()
             }
             if (justMeasured) {
@@ -55,21 +88,28 @@ class Aoc2022Day10 {
         }
 
         fun signalStrength() = strength
+
+        fun currentImage() = crt.toString()
+            .debug { println(crt) }
+
     }
 
-    fun part1(input: List<String>) : Int {
-        val cpu = Cpu(x = 1)
+    private fun process(input: List<String>, crt: Crt? = null) : Cpu {
+        val cpu = Cpu(x = 1, crt)
         input.forEach {
             val instruction = it.substringBefore(' ')
             val argument = it.substringAfter(' ', "")
-            cpu.process(instruction, argument)
+            cpu.invoke(instruction, argument)
         }
-        return cpu.signalStrength()
+        return cpu
     }
 
-    fun part2(input: List<String>) : Int {
-        return input
-            .count()
+    fun part1(input: List<String>) : Int {
+        return process(input).signalStrength()
+    }
+
+    fun part2(input: List<String>) : String {
+        return process(input, Crt(width = 40, height = 6)).currentImage()
     }
 
 }
@@ -79,11 +119,19 @@ fun main() {
     val prefix = "aoc2022/aoc2022day10"
     val testData = readLines("$prefix.test.txt")
     val realData = readLines("$prefix.real.txt")
+    val expectedImage = """
+        ##..##..##..##..##..##..##..##..##..##..
+        ###...###...###...###...###...###...###.
+        ####....####....####....####....####....
+        #####.....#####.....#####.....#####.....
+        ######......######......######......####
+        #######.......#######.......#######.....
+    """.trimIndent()
 
     verify(0, solver.part1(listOf("noop", "addx 3", "addx -5")))
     verify(13140, solver.part1(testData))
     compute({ solver.part1(realData) }, "$prefix.part1 = ")
 
-//    verify(-1, solver.part2(testData))
-//    compute({ solver.part2(realData) }, "$prefix.part2 = ")
+    verify(expectedImage, solver.part2(testData))
+    compute({ solver.part2(realData).replace('#', '█') }, "$prefix.part2 = \n")
 }
