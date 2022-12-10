@@ -151,5 +151,5 @@ fun main() {
     compute({ solver.part1(realData) }, "$prefix.part1 = ")
 
     verify(square, solver.part2(testData))
-    compute({ solver.part2(realData) }, "$prefix.part2 = \n")
+    compute({ solver.part2(realData).replace('#', '█') }, "$prefix.part2 = \n")
 }
