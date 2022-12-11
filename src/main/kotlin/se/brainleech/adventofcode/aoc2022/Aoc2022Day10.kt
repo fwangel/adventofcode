@@ -52,7 +52,7 @@ class Aoc2022Day10 {
     }
 
     data class Cpu(private var x: Int = 1, private val crt: Crt? = null) {
-        private var cycle = 1
+        private var clock = 0
         private var strength = 0
         private var justMeasured = false
 
@@ -61,29 +61,29 @@ class Aoc2022Day10 {
             return this
         }
 
-        private fun step() : Cpu {
+        private fun tick() : Cpu {
             justMeasured = false
 
-            crt?.updateBeam(cycle -1)
+            crt?.updateBeam(clock)
 
-            cycle++
-            if (cycle == 20 || ((cycle - 20) % 40 == 0)) {
-                strength += cycle.times(x)
+            clock++
+            if (clock % 40 == 20) {
+                strength += clock.times(x)
                 justMeasured = true
             }
             return this
         }
 
         fun invoke(instruction: String, argument: String) {
-            trace { println("cycle:$cycle, $instruction $argument, current x: $x") }
+            trace { println("cycle:$clock, $instruction $argument, current x: $x") }
 
             val strengthBefore = strength
             when (instruction) {
-                "addx" -> step().then { x += argument.toInt() }.then { step() }.then { crt?.updateSpritePosition(x) }
-                "noop" -> step()
+                "addx" -> tick().tick().then { x += argument.toInt() }.then { crt?.updateSpritePosition(x) }
+                "noop" -> tick()
             }
             if (justMeasured) {
-                debug { println("cycle:$cycle, $instruction $argument => x: $x, sig:$strength (+${strength - strengthBefore})") }
+                debug { println("cycle:$clock, $instruction $argument => x: $x, sig:$strength (+${strength - strengthBefore})") }
             }
         }
 
