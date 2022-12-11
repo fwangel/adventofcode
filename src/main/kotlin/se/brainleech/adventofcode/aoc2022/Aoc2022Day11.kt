@@ -8,9 +8,9 @@ class Aoc2022Day11 {
 
     companion object {
         const val DEBUG = false
-        const val OLD_VALUE = Int.MAX_VALUE
+        const val OLD_VALUE = Long.MAX_VALUE
 
-        fun Int.orOther(rule: Pair<Int, Int>): Int = if (this == rule.first) rule.second else this
+        fun Long.orOther(rule: Pair<Long, Long>): Long = if (this == rule.first) rule.second else this
     }
 
     private inline fun <T> T.debug(block: (T) -> Unit): T {
@@ -18,37 +18,48 @@ class Aoc2022Day11 {
         return this
     }
 
+    sealed class WorryManager {
+        abstract fun manage(value: Long): Long
+    }
+    data class WorryDivider(val factor: Int): WorryManager() {
+        override fun manage(value: Long) = value.div(factor)
+    }
+    data class WorryModulo(val factor: Long): WorryManager() {
+        override fun manage(value: Long) = value.mod(factor)
+    }
+
     sealed class Operation {
-        abstract fun newValue(old: Int): Int
+        abstract fun newValue(old: Long): Long
     }
-    data class MulOperation(val value: Int) : Operation() {
-        override fun newValue(old: Int): Int = old * value.orOther(OLD_VALUE to old)
+    data class MulOperation(val value: Long) : Operation() {
+        override fun newValue(old: Long): Long = old * value.orOther(OLD_VALUE to old)
     }
-    data class DivOperation(val value: Int) : Operation() {
-        override fun newValue(old: Int): Int = old / value.orOther(OLD_VALUE to old)
+    data class DivOperation(val value: Long) : Operation() {
+        override fun newValue(old: Long): Long = old / value.orOther(OLD_VALUE to old)
     }
-    data class AddOperation(val value: Int) : Operation() {
-        override fun newValue(old: Int): Int = old + value.orOther(OLD_VALUE to old)
+    data class AddOperation(val value: Long) : Operation() {
+        override fun newValue(old: Long): Long = old + value.orOther(OLD_VALUE to old)
     }
-    data class SubOperation(val value: Int) : Operation() {
-        override fun newValue(old: Int): Int = old - value.orOther(OLD_VALUE to old)
+    data class SubOperation(val value: Long) : Operation() {
+        override fun newValue(old: Long): Long = old - value.orOther(OLD_VALUE to old)
     }
 
     sealed class Test {
-        abstract fun test(value: Int) : Boolean
+        abstract fun test(value: Long) : Boolean
     }
-    data class DivisibleByConst(val constant: Int): Test() {
-        override fun test(value: Int): Boolean = (value % constant) == 0
+    data class DivisibleByConst(val constant: Long): Test() {
+        override fun test(value: Long): Boolean = (value % constant) == 0L
     }
 
     data class Monkey(val monkeyIndex: Int,
-                      private val worryLevels: MutableList<Int> = mutableListOf(),
+                      private val worryLevels: MutableList<Long> = mutableListOf(),
                       private val operation: Operation,
-                      private val worryTest: Test,
+                      val worryTest: Test,
                       private val monkeyIndexOnTrue: Int,
                       private val monkeyIndexOnFalse: Int,
-                      private var inspections: Int = 0) {
+                      private var inspections: Long = 0) {
 
+        private lateinit var worryManager: WorryManager
         private lateinit var monkeyOnTrue: Monkey
         private lateinit var monkeyOnFalse: Monkey
 
@@ -57,32 +68,37 @@ class Aoc2022Day11 {
             this.monkeyOnFalse = monkeys[monkeyIndexOnFalse]
         }
 
-        fun act() {
-            if (worryLevels.isEmpty()) return
+        fun setWorryManager(worryManager: WorryManager) {
+            this.worryManager = worryManager
+        }
+
+        fun act(): Monkey {
+            if (worryLevels.isEmpty()) return this
             inspections += worryLevels.size
 
             worryLevels.onEach {
-                val newValue = operation.newValue(it).div(3)
+                val newValue = worryManager.manage(operation.newValue(it))
                 if (worryTest.test(newValue)) monkeyOnTrue.worryLevels.add(newValue)
                 else monkeyOnFalse.worryLevels.add(newValue)
             }
             worryLevels.clear()
+            return this
         }
 
-        fun inspections(): Int = inspections
+        fun inspections(): Long = inspections
 
-        fun worryLevels(): List<Int> = worryLevels.toList()
+        fun worryLevels(): List<Long> = worryLevels.toList()
 
         companion object {
             fun from(data: List<String>): Monkey {
                 val monkeyIndex = data[0].substringAfter(' ').substringBefore(':').toInt()
-                val worryLevels = data[1].substringAfter(": ").split(", ").map { it.toInt() }.toMutableList()
+                val worryLevels = data[1].substringAfter(": ").split(", ").map { it.toLong() }.toMutableList()
 
                 val operationFormula = data[2].substringAfter(": new = ")
                     .replace(" ", "")
                     .replace("old", OLD_VALUE.toString())
                 val operationOperator = operationFormula[operationFormula.indexOfFirst { it in listOf('*', '+', '/', '-') }]
-                val operationOperand = operationFormula.substringAfter(operationOperator).toInt()
+                val operationOperand = operationFormula.substringAfter(operationOperator).toLong()
 
                 val operation = when (operationOperator) {
                     '*' -> MulOperation(operationOperand)
@@ -94,7 +110,7 @@ class Aoc2022Day11 {
 
                 val divisibleBy = data[3].substringAfter(": divisible by ")
                     .replace("old", OLD_VALUE.toString())
-                    .toInt()
+                    .toLong()
                 val worryTest = DivisibleByConst(divisibleBy)
 
                 val monkeyIndexOnTrue = data[4].substringAfterLast(' ').toInt()
@@ -105,7 +121,7 @@ class Aoc2022Day11 {
         }
     }
 
-    private fun List<Monkey>.monkeyBusinessLevel(): Int {
+    private fun List<Monkey>.monkeyBusinessLevel(): Long {
         return this
             .sortedByDescending { it.inspections() }
             .chunked(2)
@@ -124,9 +140,11 @@ class Aoc2022Day11 {
         return monkeys
     }
 
-    fun part1(input: List<String>) : Int {
+    fun part1(input: List<String>) : Long {
         if (input.isEmpty()) return -1
         val monkeys = input.asMonkeys()
+
+        monkeys.onEach { monkey -> monkey.setWorryManager(WorryDivider(3)) }
 
         repeat(20) { index ->
             monkeys.onEach { monkey -> monkey.act() }
@@ -134,6 +152,7 @@ class Aoc2022Day11 {
             debug {
                 println("== After round ${index + 1} ==")
                 monkeys.onEach { monkey -> println("Monkey ${monkey.monkeyIndex}: ${monkey.worryLevels().joinToString(", ")}") }
+                monkeys.monkeyBusinessLevel().debug { println("Monkey Business Level = $it") }
             }
         }
 
@@ -141,9 +160,31 @@ class Aoc2022Day11 {
             .debug { println("Monkey Business Level = $it") }
     }
 
-    fun part2(input: List<String>) : Int {
-        if (input.isEmpty()) return -1
-        return -1
+    fun part2(input: List<String>) : Long {
+        val monkeys = input.asMonkeys()
+
+        val lowestCommonDenominator = monkeys
+            .map { monkey -> (monkey.worryTest as DivisibleByConst).constant }
+            .reduce { acc, value -> acc * value }
+
+        monkeys.onEach { monkey ->
+            monkey.setWorryManager(WorryModulo(lowestCommonDenominator))
+        }
+
+        repeat(10_000) { index ->
+            monkeys.onEach { monkey -> monkey.act() }
+
+            debug {
+                if ((index + 1) in listOf(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 15, 20, 1000, 2000, 3000, 4000, 5000, 6000, 7000, 8000, 9000, 10000)) {
+                    println("== After round ${index + 1} ==")
+                    monkeys.onEach { monkey -> println("Monkey ${monkey.monkeyIndex} inspected items ${monkey.inspections()} times: ${monkey.worryLevels().joinToString(", ")}") }
+                    monkeys.monkeyBusinessLevel().debug { println("Monkey Business Level = $it") }
+                }
+            }
+        }
+
+        return monkeys.monkeyBusinessLevel()
+            .debug { println("Monkey Business Level = $it") }
     }
 
 }
@@ -154,9 +195,9 @@ fun main() {
     val testData = readLines("$prefix.test.txt")
     val realData = readLines("$prefix.real.txt")
 
-    verify(10605, solver.part1(testData))
+    verify(10605L, solver.part1(testData))
     compute({ solver.part1(realData) }, "$prefix.part1 = ")
 
-    verify(Int.MIN_VALUE, solver.part2(testData))
+    verify(2713310158L, solver.part2(testData))
     compute({ solver.part2(realData) }, "$prefix.part2 = ")
 }
