@@ -59,13 +59,25 @@ class Aoc2022Day12 {
         fun asCompleted(): Path = this.apply{ completed = true }
         fun isCompleted() = completed
         fun cost(): Cost = steps.size - 1
+        fun flipped(): Path {
+            val path = Path()
+            var parent: Step? = null
+            steps.toList().reversed().onEachIndexed { cost, step ->
+                path.steps.add(Step(step.position, cost, parent))
+                parent = step
+            }
+            steps.clear()
+            steps.addAll(path.steps)
+            return this
+        }
         override fun toString() = "completed=${completed}, cost=${cost()}, steps=$steps"
     }
 
     data class Hill(
         val start: Position,
         val goal: Position,
-        private var elevations: List<List<Int>>
+        private var elevations: List<List<Int>>,
+        val downhill: Boolean = false
     ) {
         private val height = elevations.size
         private val width = elevations.first().size
@@ -79,35 +91,24 @@ class Aoc2022Day12 {
             if (outsideMap(target)) return false
             val sourceHeight = heightAt(source)
             val targetHeight = heightAt(target)
-            return targetHeight <= sourceHeight + 1
+            return if (downhill) sourceHeight <= targetHeight + 1 else targetHeight <= sourceHeight + 1
         }
 
-        private fun lowPoints(): List<Position> {
-            return elevations.flatMapIndexed { y, line ->
-                line.mapIndexed { x, elevation -> if (elevation == 0) Position(y, x) else null }
-            }.filterNotNull()
-        }
+        fun isLowPoint(position: Position) = heightAt(position) == 0
 
         private fun validPositionsFrom(pos: Position): List<Position> {
             val targets = listOf(pos.down(), pos.right(), pos.up(), pos.left())
             return targets.filter { target -> canMoveBetween(pos, target) }
         }
 
-        fun findFastestPathFromAnyLowPoint(to: Position): Path {
-            lowPoints().onEach { start ->
-                findFastestPathBetween(start, to)
-            }
-            return bestPath
-        }
-
-        fun findFastestPathBetween(from: Position, to: Position): Path {
+        fun findFastestPath(from: Position, isGoal: (Position) -> Boolean): Path {
             val explored = mutableSetOf(from)
             val stepsToExplore = arrayListOf(Step(from))
             while (stepsToExplore.isNotEmpty()) {
                 val step = stepsToExplore.first()
                 val currentCost = step.cost
-                if (step.position == to) {
-                    val path = step.toPath().asCompleted()
+                if (isGoal(step.position)) {
+                    val path = step.toPath().asCompleted().apply { if (downhill) flipped() }
                     if (step.cost < bestCost) {
                         bestPath = path
                         bestCost = step.cost
@@ -135,11 +136,12 @@ class Aoc2022Day12 {
             flatMap[(goal.y * width) + goal.x] = 'E'
 
             if (done) {
-                val path = bestPath.steps
-                path.onEachIndexed { index, step ->
+                val path = bestPath
+                val steps = path.steps
+                steps.onEachIndexed { index, step ->
                     val pos = step.position
                     // shift the direction indicators to show path
-                    flatMap[(pos.y * width) + pos.x] = if (index == path.size - 1) 'E' else path[index + 1].dir
+                    flatMap[(pos.y * width) + pos.x] = if (index == steps.size - 1) 'E' else steps[index + 1].dir
                 }
             }
 
@@ -149,7 +151,7 @@ class Aoc2022Day12 {
 
     private val Char.toElevation: Int get() = this.code - 'a'.code
 
-    private fun List<String>.asHill(): Hill {
+    private fun List<String>.asHill(downhill: Boolean = false): Hill {
         var start = Position(0, 0)
         var goal  = Position(0, 0)
         val elevations = this.mapIndexed { y, line ->
@@ -165,7 +167,7 @@ class Aoc2022Day12 {
             }
         }
 
-        return Hill(start, goal, elevations)
+        return Hill(start, goal, elevations, downhill)
     }
 
     fun part1(input: List<String>) : Int {
@@ -173,7 +175,7 @@ class Aoc2022Day12 {
 
         val map = input.asHill()
             .debug { println(it) }
-        val bestPath = map.findFastestPathBetween(map.start, map.goal)
+        val bestPath = map.findFastestPath(from = map.start) { position -> position == map.goal }
             .debug { println("Best path: $it") }
         return bestPath.cost()
             .debug { println(map) }
@@ -182,9 +184,9 @@ class Aoc2022Day12 {
     fun part2(input: List<String>) : Int {
         if (input.isEmpty()) return -1
 
-        val map = input.asHill()
+        val map = input.asHill(downhill = true)
             .debug { println(it) }
-        val bestPath = map.findFastestPathFromAnyLowPoint(map.goal)
+        val bestPath = map.findFastestPath(from = map.goal) { position -> map.isLowPoint(position) }
             .debug { println("Best path: $it") }
         return bestPath.cost()
             .debug { println(map) }
