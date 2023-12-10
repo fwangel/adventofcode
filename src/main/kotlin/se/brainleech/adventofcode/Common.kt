@@ -40,3 +40,9 @@ fun String.sortedByChar(): String {
         .sorted()
         .joinToString("")
 }
+
+fun greatestCommonDenominator(x: Long, y: Long): Long = if (y == 0L) x else greatestCommonDenominator(y, x % y)
+
+fun List<Long>.greatestCommonDenominator(): Long = this.fold(0L) { x, y -> greatestCommonDenominator(x, y) }
+
+fun List<Long>.leastCommonMultiple(): Long = this.fold(1L) { x, y -> x * (y / greatestCommonDenominator(x, y))}

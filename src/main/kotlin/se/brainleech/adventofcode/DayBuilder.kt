@@ -41,7 +41,7 @@ fun createDay(year: Int, day: Int) {
 }
 
 fun main() {
-    val year = 2016
+    val year = 2023
     for (day in 1..25) {
         createDay(year, day)
     }

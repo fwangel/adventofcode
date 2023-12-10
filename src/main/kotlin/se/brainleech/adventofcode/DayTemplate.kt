@@ -6,14 +6,29 @@ import se.brainleech.adventofcode.verify
 
 class DayTemplate {
 
+    companion object {
+        const val DEBUG = false
+        const val TRACE = false
+
+        inline fun <T> T.debug(block: (T) -> Unit): T {
+            if (DEBUG) block(this)
+            return this
+        }
+
+        inline fun <T> T.trace(block: (T) -> Unit): T {
+            if (TRACE) block(this)
+            return this
+        }
+    }
+
     fun part1(input: List<String>) : Int {
-        return input
-            .count()
+        if (input.isEmpty()) return -1
+        return -1
     }
 
     fun part2(input: List<String>) : Int {
-        return input
-            .count()
+        if (input.isEmpty()) return -1
+        return -1
     }
 
 }
