@@ -46,3 +46,31 @@ fun greatestCommonDenominator(x: Long, y: Long): Long = if (y == 0L) x else grea
 fun List<Long>.greatestCommonDenominator(): Long = this.fold(0L) { x, y -> greatestCommonDenominator(x, y) }
 
 fun List<Long>.leastCommonMultiple(): Long = this.fold(1L) { x, y -> x * (y / greatestCommonDenominator(x, y))}
+
+// NOTE: Kotlin does not allow inheriting a data class,
+//       so the base Location class must implement at
+//       least the equals() and hashCode() methods.
+open class Location(val x: Int = 0, val y: Int = 0) {
+    fun up(): Location = Location(x, y - 1)
+    fun right(): Location = Location(x + 1, y)
+    fun down(): Location = Location(x, y + 1)
+    fun left(): Location = Location(x - 1, y)
+    fun upRight(): Location = Location(x + 1, y - 1)
+    fun downRight(): Location = Location(x + 1, y + 1)
+    fun downLeft(): Location = Location(x - 1, y + 1)
+    fun upLeft(): Location = Location(x - 1, y - 1)
+    fun neighbours(): List<Location> = listOf(up(), right(), down(), left())
+    fun diagonals(): List<Location> = listOf(upRight(), downRight(), downLeft(), upLeft())
+    fun neighboursAndDiagonals(): List<Location> = neighbours().plus(diagonals())
+
+    fun inside(width: Int, height: Int): Boolean = x >= 0 && y >= 0 && x < width && y < height
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        other as Location
+        return (x == other.x && y == other.y)
+    }
+
+    override fun hashCode(): Int = 31 * x + y
+    override fun toString(): String = "($x,$y)"
+}

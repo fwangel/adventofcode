@@ -1,5 +1,6 @@
 package se.brainleech.adventofcode.aoc2021
 
+import se.brainleech.adventofcode.Location
 import se.brainleech.adventofcode.compute
 import se.brainleech.adventofcode.readLines
 import se.brainleech.adventofcode.verify
@@ -12,27 +13,6 @@ class Aoc2021Day15 {
         private const val OUTSIDE_RISK = Int.MAX_VALUE
         private const val INITIAL_RISK = 0
         private const val MAX_RISK = 9
-    }
-
-    // NOTE: Kotlin does not allow inheriting a data class,
-    //       so the base Location class must implement at
-    //       least the equals() and hashCode() methods.
-
-    open class Location(val x: Int = 0, val y: Int = 0) {
-        private fun up(): Location = Location(x, y - 1)
-        private fun right(): Location = Location(x + 1, y)
-        private fun down(): Location = Location(x, y + 1)
-        private fun left(): Location = Location(x - 1, y)
-        fun neighbours(): List<Location> = listOf(up(), right(), down(), left())
-
-        override fun equals(other: Any?): Boolean {
-            if (this === other) return true
-            other as Location
-            return (x == other.x && y == other.y)
-        }
-
-        override fun hashCode(): Int = 31 * x + y
-        override fun toString(): String = "($x,$y)"
     }
 
     private class LocationWithRisk(location: Location, val accumulatedRisk: Int) :
