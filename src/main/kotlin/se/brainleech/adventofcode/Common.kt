@@ -29,9 +29,16 @@ fun readText(filename: String): String {
     return readLines(filename).stream().collect(Collectors.joining("\n"))
 }
 
-fun String.toListOfInts(): List<Int> {
+fun List<String>.toListOfCharArrays(): List<CharArray> = this.map { it.toCharArray() }
+
+fun String.toListOfInts(delimiter: String = ","): List<Int> {
     if (this.isBlank()) return emptyList()
-    return this.split(",").map { it.toInt() }
+    return this.split(delimiter).map { it.trim().toInt() }
+}
+
+fun String.toListOfLongs(delimiter: String = ","): List<Long> {
+    if (this.isBlank()) return emptyList()
+    return this.split(delimiter).map { it.trim().toLong() }
 }
 
 fun String.sortedByChar(): String {
