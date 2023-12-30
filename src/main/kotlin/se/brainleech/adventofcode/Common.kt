@@ -48,6 +48,10 @@ fun String.sortedByChar(): String {
         .joinToString("")
 }
 
+inline fun String.substringOrElse(startIndex: Int, defaultValue: (Int) -> String): String {
+    return if (startIndex in 0..lastIndex) substring(startIndex) else defaultValue(startIndex)
+}
+
 fun greatestCommonDenominator(x: Long, y: Long): Long = if (y == 0L) x else greatestCommonDenominator(y, x % y)
 
 fun List<Long>.greatestCommonDenominator(): Long = this.fold(0L) { x, y -> greatestCommonDenominator(x, y) }
