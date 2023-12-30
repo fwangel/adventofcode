@@ -24,6 +24,8 @@ class Aoc2023Day12 {
     }
 
     private data class Condition(val patternWithWildcards: String, val expectedGroups: List<Int>) {
+        private val knownArrangements = mutableMapOf<Pair<String, List<Int>>, Long>()
+
         fun numberOfArrangements(remainingPattern: String, remainingGroups: List<Int>): Long {
             if (remainingPattern.isEmpty()) {
                 // no more wells to check; we expect to have exhausted all groups too
@@ -33,6 +35,11 @@ class Aoc2023Day12 {
             if (remainingGroups.isEmpty()) {
                 // no more groups; we do not expect to find any more damaged wells
                 return if (remainingPattern.contains(DAMAGED)) 0 else 1
+            }
+
+            val key = remainingPattern to remainingGroups
+            if (knownArrangements.containsKey(key)) {
+                return knownArrangements[key]!!
             }
 
             var numberOfArrangements = 0L
@@ -58,6 +65,7 @@ class Aoc2023Day12 {
                 numberOfArrangements += numberOfArrangements(remainingPattern.substring(1), remainingGroups)
             }
 
+            knownArrangements[key] = numberOfArrangements
             return numberOfArrangements
         }
 
@@ -68,11 +76,12 @@ class Aoc2023Day12 {
         }
     }
 
-    private fun String.toCondition(): Condition {
+    private fun String.toCondition(repeated: Int = 1): Condition {
         val parts = this.split(" ")
-        // optimize the pattern (ignore leading/trailing/repeated operational wells)
-        val pattern = parts[0].trim(OPERATIONAL).replace("[.]{2,}".toRegex(), OPERATIONAL.toString())
-        val groups = parts[1].toListOfInts()
+        // possibly repeat the pattern and group definition five times, separated by an unknown
+        // ...but still optimize the pattern (ignore leading/trailing/repeated operational wells)
+        val pattern = (parts[0] + "?").repeat(repeated).dropLast(1).trim(OPERATIONAL).replace("[.]{2,}".toRegex(), OPERATIONAL.toString())
+        val groups = (parts[1] + ",").repeat(repeated).trim(',').toListOfInts()
         return Condition(pattern, groups)
     }
 
@@ -86,7 +95,10 @@ class Aoc2023Day12 {
 
     fun part2(input: List<String>) : Long {
         if (input.isEmpty()) return -1L
-        return -1L
+        return input
+            .filter { it.isNotEmpty() }
+            .sumOf { it.toCondition(repeated = 5).numberOfArrangements() }
+            .debug { println("total arrangements=$it\n\n") }
     }
 
 }
@@ -100,6 +112,6 @@ fun main() {
     verify(21L, solver.part1(testData))
     compute({ solver.part1(realData) }, "$prefix.part1 = ")
 
-    verify(-1L, solver.part2(testData))
+    verify(525152L, solver.part2(testData))
     compute({ solver.part2(realData) }, "$prefix.part2 = ")
 }
