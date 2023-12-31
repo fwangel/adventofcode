@@ -21,9 +21,13 @@ class Aoc2023Day13 {
         }
     }
 
-    private data class Valley(val id: Int, val patterns: List<String>) {
+    private data class Valley(val id: Int, val patterns: List<String>, val withSmudges: Boolean = false, val rotated: Boolean = false) {
         private val width = patterns.first().length
         private val height = patterns.size
+        private val expectedSmudges = if (withSmudges) 1 else 0
+
+        private fun orientation() = if (rotated) "Vertical (rotated)" else "Horizontal"
+
         private fun numberOfColumnsLeftOfVerticalLineOfReflection(): Long {
             val rotatedPatterns = mutableListOf<String>()
             for (col in 0 until width) {
@@ -33,29 +37,38 @@ class Aoc2023Day13 {
                 }
                 rotatedPatterns.add(newRow.joinToString(separator = ""))
             }
-            trace { println("#$id: Vertical (rotated):\n" + rotatedPatterns.joinToString(separator = "\n") + "\n") }
-            return Valley(id, rotatedPatterns).numberOfRowsAboveHorizontalLineOfReflection()
+            return Valley(id, rotatedPatterns, withSmudges, rotated = true).numberOfRowsAboveHorizontalLineOfReflection()
         }
 
         private fun numberOfRowsAboveHorizontalLineOfReflection(): Long {
-            trace { println("#$id: Horizontal:\n" + patterns.joinToString(separator = "\n") + "\n") }
-            val reflectionStarts = patterns.windowed(size = 2, step = 1).mapIndexed() { index, rows -> if (rows.first() == rows.last()) index else -1 }.filter { it >= 0 }
-            reflectionStarts.forEach innerLoop@ { reflectionStart ->
-                var above = reflectionStart
-                var below = reflectionStart + 1
-                while (above >= 0 && below < height) {
-                    trace { println("    Checking: ${patterns[above]} vs ${patterns[below]} ($above vs $below)") }
-                    if (patterns[above --] != patterns[below ++]) return@innerLoop
+            trace { println("\n#$id: ${orientation()}:\n" + patterns.joinToString(separator = "\n")) }
+
+            for (row in 0 until height - 1) {
+                var smudges = 0
+                for (rowOffset in 0 until height) {
+                    val above = row - rowOffset
+                    val below = row + 1 + rowOffset
+                    if (above >= 0 && below < height) {
+                        smudges += (0 until width).count { col -> patterns[above][col] != patterns[below][col] }
+                    }
                 }
-                return reflectionStart.plus(1).toLong()
-                    .debug { println("#$id: Found reflection at: $it") }
+                if (smudges == expectedSmudges) {
+                    debug { println("#$id: Mirrored at ${row.plus(1)} (orientation: ${orientation()})") }
+                    return row.plus(1).toLong()
+                }
             }
-            trace { println("#$id: No mirror at all!") }
+
+            debug { println("#$id: Not mirrored (orientation: ${orientation()})") }
             return 0L
         }
 
+        private fun Long.orElse(other: () -> Long): Long {
+            return if (this == 0L) other() else this
+        }
+
         fun summary(): Long {
-            return numberOfColumnsLeftOfVerticalLineOfReflection().plus(numberOfRowsAboveHorizontalLineOfReflection().times(100L))
+            return numberOfRowsAboveHorizontalLineOfReflection().times(100L)
+                .orElse { numberOfColumnsLeftOfVerticalLineOfReflection() }
         }
     }
 
@@ -70,7 +83,11 @@ class Aoc2023Day13 {
 
     fun part2(input: String) : Long {
         if (input.isEmpty()) return -1L
-        return -1L
+        return input
+            .split("\n\n")
+            .map { it.split("\n") }
+            .mapIndexed { index, patterns -> Valley(index + 1, patterns, withSmudges = true).summary() }
+            .sum()
     }
 
 }
@@ -84,6 +101,6 @@ fun main() {
     verify(405L, solver.part1(testData))
     compute({ solver.part1(realData) }, "$prefix.part1 = ")
 
-    verify(-1L, solver.part2(testData))
+    verify(400L, solver.part2(testData))
     compute({ solver.part2(realData) }, "$prefix.part2 = ")
 }
