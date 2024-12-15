@@ -31,14 +31,14 @@ fun readText(filename: String): String {
 
 fun List<String>.toListOfCharArrays(): List<CharArray> = this.map { it.toCharArray() }
 
-fun String.toListOfInts(delimiter: String = ","): List<Int> {
+fun String.toListOfInts(delimiter: String = ",", maxPerLine: Int = 0): List<Int> {
     if (this.isBlank()) return emptyList()
-    return this.split(delimiter).map { it.trim().toInt() }
+    return this.split(delimiter, limit = maxPerLine).map { it.trim().toInt() }
 }
 
-fun String.toListOfLongs(delimiter: String = ","): List<Long> {
+fun String.toListOfLongs(delimiter: String = ",", maxPerLine: Int = 0): List<Long> {
     if (this.isBlank()) return emptyList()
-    return this.split(delimiter).map { it.trim().toLong() }
+    return this.split(delimiter, limit = maxPerLine).map { it.trim().toLong() }
 }
 
 fun String.sortedByChar(): String {
