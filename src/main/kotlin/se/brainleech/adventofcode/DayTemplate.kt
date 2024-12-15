@@ -7,7 +7,7 @@ import se.brainleech.adventofcode.verify
 class DayTemplate {
 
     companion object {
-        const val DEBUG = false
+        const val DEBUG = true
         const val TRACE = false
 
         inline fun <T> T.debug(block: (T) -> Unit): T {
@@ -21,14 +21,14 @@ class DayTemplate {
         }
     }
 
-    fun part1(input: List<String>) : Int {
-        if (input.isEmpty()) return -1
-        return -1
+    fun part1(input: List<String>) : Long {
+        if (input.isEmpty()) return -1L
+        return -1L
     }
 
-    fun part2(input: List<String>) : Int {
-        if (input.isEmpty()) return -1
-        return -1
+    fun part2(input: List<String>) : Long {
+        if (input.isEmpty()) return -1L
+        return -1L
     }
 
 }
@@ -39,9 +39,9 @@ fun main() {
     val testData = readLines("$prefix.test.txt")
     val realData = readLines("$prefix.real.txt")
 
-    verify(-1, solver.part1(testData))
+    verify(-1L, solver.part1(testData))
     compute({ solver.part1(realData) }, "$prefix.part1 = ")
 
-    verify(-1, solver.part2(testData))
+    verify(-1L, solver.part2(testData))
     compute({ solver.part2(realData) }, "$prefix.part2 = ")
 }
